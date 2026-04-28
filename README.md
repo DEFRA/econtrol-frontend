@@ -1,10 +1,10 @@
-# econtrol-frontend
+# eControl Frontend
 
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_econtrol-frontend&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=DEFRA_econtrol-frontend)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_econtrol-frontend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DEFRA_econtrol-frontend)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_econtrol-frontend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=DEFRA_econtrol-frontend)
 
-Core delivery platform Node.js Frontend Template.
+eCITES - Process a permit (Frontend)
 
 - [Requirements](#requirements)
   - [Node.js](#nodejs)
