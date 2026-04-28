@@ -1,0 +1,37 @@
+{% extends 'layouts/page.njk' %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl">
+      Search for CITES permits
+    </h1>
+
+    <form method="post" action="">
+
+      <div class="govuk-form-group">
+        <label class="govuk-label govuk-label--m" for="permitReferences">
+          Enter the permit references you want to process
+        </label>
+        
+        <div id="permitReferences-hint" class="govuk-hint">
+          Each reference must be on a new line.
+        </div>
+
+        <textarea class="govuk-textarea" id="permitReferences" name="permitReferences" rows="10" aria-describedby="permitReferences-hint">
+        </textarea>
+
+      </div>
+
+      <p id="permitCount" class="govuk-body-s govuk-!-margin-top-1" aria-live="polite" aria-atomic="true"></p>
+            
+      <button type="submit" name="search" class="govuk-button" data-module="govuk-button">
+        Search for permits
+      </button>
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

@@ -44,7 +44,7 @@ export const config = convict({
   serviceName: {
     doc: 'Applications Service Name',
     format: String,
-    default: 'econtrol-frontend'
+    default: 'Process a CITES permit'
   },
   root: {
     doc: 'Project root',

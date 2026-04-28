@@ -23,7 +23,7 @@ describe('#errors', () => {
     })
 
     expect(result).toEqual(
-      expect.stringContaining('Page not found | econtrol-frontend')
+      expect.stringContaining('Page not found | Process a CITES permit')
     )
     expect(statusCode).toBe(statusCodes.notFound)
   })

@@ -62,16 +62,11 @@ describe('context and cache', () => {
           navigation: [
             {
               current: true,
-              text: 'Home',
+              text: 'Search',
               href: '/'
-            },
-            {
-              current: false,
-              text: 'About',
-              href: '/about'
             }
           ],
-          serviceName: 'econtrol-frontend',
+          serviceName: 'Process a CITES permit',
           serviceUrl: '/'
         })
       })
@@ -151,16 +146,11 @@ describe('context and cache', () => {
           navigation: [
             {
               current: true,
-              text: 'Home',
+              text: 'Search',
               href: '/'
-            },
-            {
-              current: false,
-              text: 'About',
-              href: '/about'
             }
           ],
-          serviceName: 'econtrol-frontend',
+          serviceName: 'Process a CITES permit',
           serviceUrl: '/'
         })
       })
