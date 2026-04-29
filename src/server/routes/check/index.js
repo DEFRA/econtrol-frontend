@@ -1,18 +1,18 @@
-import { searchResultsController } from './controller.js'
+import { checkController } from './controller.js'
 
 /**
  * Sets up the routes used in the home page.
  * These routes are registered in src/server/router.js.
  */
-export const results = {
+export const check = {
   plugin: {
-    name: 'results',
+    name: 'check',
     register(server) {
       server.route([
         {
           method: 'GET',
-          path: '/results',
-          ...searchResultsController
+          path: '/check',
+          ...checkController
         }
       ])
     }

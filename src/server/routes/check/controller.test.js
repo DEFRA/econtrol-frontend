@@ -1,7 +1,7 @@
 import { createServer } from '#/server/server.js'
 import { statusCodes } from '#/server/common/constants/status-codes.js'
 
-describe('#searchResultsController', () => {
+describe('#searchController', () => {
   let server
 
   beforeAll(async () => {
@@ -23,4 +23,3 @@ describe('#searchResultsController', () => {
     expect(statusCode).toBe(statusCodes.ok)
   })
 })
-

@@ -16,7 +16,7 @@ export const resultsController = {
       searchService.lookupOne("24GBEXP1CLWMD", authHeader).then(
         (r) => r.json().then((result) => {
           console.log(result)
-          resolve(h.view('search/results/index', {
+          resolve(h.view('search/results', {
             pageTitle: 'Results',
             heading: 'Results',
             results: [result]
