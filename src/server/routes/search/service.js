@@ -1,3 +1,7 @@
+import { config } from '#/config/config.js'
+
+const proxy = config.get('httpProxy')
+
 export const searchService = {
     lookupOne: (permitNumber, authHeader) => {
         return fetch('https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_SearchPermitByNumber', {
@@ -10,6 +14,11 @@ export const searchService = {
                 "OData-Version": "4.0"
             },
             body: JSON.stringify({"permitNumber": permitNumber}),
+            ...(proxy && {dispatcher: new ProxyAgent({
+                uri: proxy,
+                keepAliveTimeout: 10,
+                keepAliveMaxTimeout: 10
+            })})
         });
     }
 }
