@@ -6,11 +6,20 @@ import { searchController } from './controller.js'
  */
 export const search = {
   plugin: {
-    name: 'home',
+    name: 'search',
     register(server) {
       server.route([
         {
           method: 'GET',
+          path: '/',
+          ...searchController
+        }
+      ])
+    },
+     register(server) {
+      server.route([
+        {
+          method: 'POST',
           path: '/',
           ...searchController
         }
