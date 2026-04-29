@@ -1,4 +1,4 @@
-import { searchController } from './controller.js'
+import { searchController, resultsController } from './controller.js'
 
 /**
  * Sets up the routes used in the home page.
@@ -15,13 +15,11 @@ export const search = {
           ...searchController
         }
       ])
-    },
-     register(server) {
       server.route([
         {
           method: 'POST',
           path: '/',
-          ...searchController
+          ...resultsController
         }
       ])
     }
