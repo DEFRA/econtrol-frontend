@@ -5,3 +5,8 @@
 @use "core";
 @use "components";
 @use "partials";
+
+.permit-notification-banner--error {
+    border-color: #ca3535;
+    background-color: #ca3535;
+}

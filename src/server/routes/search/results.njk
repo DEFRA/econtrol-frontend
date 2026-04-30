@@ -6,6 +6,27 @@
 
     <h1 class="govuk-heading-l">Permit search results</h1>
 
+    {% if errors | length > 0 %}
+    <div class="govuk-!-margin-bottom-6">
+      <div class="govuk-notification-banner govuk-!-margin-top-0 permit-notification-banner--error" role="alert" aria-labelledby="govuk-notification-banner-title-permit-not-found" data-module="govuk-notification-banner" data-govuk-notification-banner-init="">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title-permit-not-found">
+            {{ errors | length }} permit could not be found
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-body govuk-!-margin-bottom-2">Permit reference:</p>
+          <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-3">
+            {% for error in errors %}
+            <li><strong>{{ error }}</strong></li>
+            {% endfor %}
+          </ul>
+          <p class="govuk-body govuk-!-margin-bottom-0"><a href="/beta-16-04-26/single-search-results/search-results" class="govuk-link govuk-link--no-visited-state">Change your search</a></p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
     <p class="govuk-body">Showing {{ results | length }} permits that matched your search.</p>
     
     <h2 class="govuk-heading-s govuk-visually-hidden">Permits from your search</h2>
@@ -26,7 +47,7 @@
 {% for result in results %}
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">{{ result.permitNumber }}</td>
-          <td class="govuk-table__cell">Import</td>
+          <td class="govuk-table__cell">{{ "Export" if result.isExportNotImport else "Import"}}</td>
           <td class="govuk-table__cell">{{ result.specimen }}</td>
           <td class="govuk-table__cell">?</td>
           <td class="govuk-table__cell">{{ result.validityDate }}</td>
