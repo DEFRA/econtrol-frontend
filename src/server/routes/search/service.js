@@ -1,7 +1,5 @@
 import { config } from '#/config/config.js'
 
-import { ProxyAgent } from 'proxy-agent';
-
 const proxy = config.get('httpProxy')
 
 export const searchService = (authHeader) => ({
@@ -15,12 +13,7 @@ export const searchService = (authHeader) => ({
                 "OData-MaxVersion": "4.0",
                 "OData-Version": "4.0"
             },
-            body: JSON.stringify({"permitNumber": permitNumber}),
-            ...(proxy && {dispatcher: new ProxyAgent({
-                uri: proxy,
-                keepAliveTimeout: 10,
-                keepAliveMaxTimeout: 10
-            })})
+            body: JSON.stringify({"permitNumber": permitNumber})
         });
     },
     async lookupMany(permitNumbers) {

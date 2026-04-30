@@ -17,7 +17,6 @@ import { contentSecurityPolicy } from './plugins/content-security-policy.js'
 import { metrics } from '@defra/cdp-metrics'
 
 export async function createServer() {
-  setupProxy()
   const server = hapi.server({
     host: config.get('host'),
     port: config.get('port'),
