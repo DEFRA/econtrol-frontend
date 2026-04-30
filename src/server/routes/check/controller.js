@@ -1,4 +1,4 @@
-import { searchService, isValidPermitNumber } from '../search/service.js'
+import { searchService, isValidPermitNumber, isExportNotImport } from '../search/service.js'
 
 export const checkController = {
   handler(_request, h) {
@@ -14,7 +14,7 @@ export const checkController = {
           resolve(h.view('check/index', {
             pageTitle: 'Check',
             heading: 'Check',
-            permit: result
+            permit: {...result, isExportNotImport: isExportNotImport(result.permitNumber)}
           }))
         })
       )

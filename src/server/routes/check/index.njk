@@ -1,429 +1,276 @@
-{% extends 'layouts/page.njk' %}
-
+{% extends "layouts/page.njk" %}
 {% block content %}
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Check permit details</h1>
-
-    <h2 class="govuk-heading-s">Permit overview</h2>
-  
-    <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
-  
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Check permit details</h1>
+      <h2 class="govuk-heading-s">Permit overview</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Permit number
-            </dt>
-            <dd class="govuk-summary-list__value">
-            25GBIMPABS719
-            </dd>
+          <dt class="govuk-summary-list__key">Permit number</dt>
+          <dd class="govuk-summary-list__value">
+            {{ permit.permitNumber }}
+          </dd>
         </div>
-    
         <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-            Type
-        </dt>
-        <dd class="govuk-summary-list__value">
-            Import
-        </dd>
+          <dt class="govuk-summary-list__key">Type</dt>
+          <dd class="govuk-summary-list__value">
+            {{ "Export" if permit.isExportNotImport else "Import" }}
+          </dd>
         </div>
-    
         <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-            Valid until
-        </dt>
-        <dd class="govuk-summary-list__value">
-            30 October 2026
-        </dd>
-        
+          <dt class="govuk-summary-list__key">Valid until</dt>
+          <dd class="govuk-summary-list__value">
+            {{ permit.validityDate }}
+          </dd>
         </div>
-    
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-                Status
-            </dt>
-            <dd class="govuk-summary-list__value">
-                <strong class="govuk-tag govuk-tag--blue">Valid</strong>
-            </dd>
+          <dt class="govuk-summary-list__key">Status</dt>
+          <dd class="govuk-summary-list__value">
+            <strong class="govuk-tag govuk-tag--blue">{{ permit.statusLabel }}</strong>
+          </dd>
         </div>
-    </dl>
-
-    <h2 class="govuk-heading-s">Exporter/Re-exporter</h2>
-  
-    <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
-
+      </dl>
+      <h2 class="govuk-heading-s">Exporter/Re-exporter</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Name and address
-            </dt>
-            <dd class="govuk-summary-list__value">
-            Serpentis Logistik GmbH<br>Gewerbepark Süd 14a<br>DE-64546 Mörfelden-Walldorf<br>Germany
-            </dd>
-            
-        </div>
-    
-        <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Country of re-export
-            </dt>
-            <dd class="govuk-summary-list__value">
+          <dt class="govuk-summary-list__key">Name and address</dt>
+          <dd class="govuk-summary-list__value">
+            Serpentis Logistik GmbH
+            <br>
+            Gewerbepark Süd 14a
+            <br>
+            DE-64546 Mörfelden-Walldorf
+            <br>
             Germany
-            </dd>
-            
+          </dd>
         </div>
-  
-    </dl>
-
-    <h2 class="govuk-heading-s">Importer</h2>
-  
-    <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Name and address
-            </dt>
-            <dd class="govuk-summary-list__value">
-            UK Exotic Reptile Imports Ltd<br>Unit 7, Riverside Business Park<br>Essex<br>IG11 0HZ<br>United Kingdom
-            </dd>
-            
+          <dt class="govuk-summary-list__key">Country of re-export</dt>
+          <dd class="govuk-summary-list__value">
+            Germany
+          </dd>
         </div>
-        
+      </dl>
+      <h2 class="govuk-heading-s">Importer</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Country of import
-            </dt>
-            <dd class="govuk-summary-list__value">
+          <dt class="govuk-summary-list__key">Name and address</dt>
+          <dd class="govuk-summary-list__value">
+            UK Exotic Reptile Imports Ltd
+            <br>
+            Unit 7, Riverside Business Park
+            <br>
+            Essex
+            <br>
+            IG11 0HZ
+            <br>
             United Kingdom
-            </dd>
+          </dd>
         </div>
-    </dl>
-
-    <h2 class="govuk-heading-s">Specimen details</h2>
-
-    <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Scientific name of species
-            </dt>
-            <dd class="govuk-summary-list__value">
+          <dt class="govuk-summary-list__key">Country of import</dt>
+          <dd class="govuk-summary-list__value">
+            United Kingdom
+          </dd>
+        </div>
+      </dl>
+      <h2 class="govuk-heading-s">Specimen details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Scientific name of species</dt>
+          <dd class="govuk-summary-list__value">
             Python bivittatus
-            </dd>
-            
+          </dd>
         </div>
-        
-
-        
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Common name of species
-            </dt>
-            <dd class="govuk-summary-list__value">
+          <dt class="govuk-summary-list__key">Common name of species</dt>
+          <dd class="govuk-summary-list__value">
             Burmese python
-            </dd>
-            
+          </dd>
         </div>
-    
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Description of specimens
-            </dt>
-            <dd class="govuk-summary-list__value">
-            Live Burmese python<br>Female<br>Microchip number 12345678912345
-            </dd>
-            
+          <dt class="govuk-summary-list__key">Description of specimens</dt>
+          <dd class="govuk-summary-list__value">
+            Live Burmese python
+            <br>
+            Female
+            <br>
+            Microchip number 12345678912345
+          </dd>
         </div>
-        
-
-        
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            CITES Appendix
-            </dt>
-            <dd class="govuk-summary-list__value">
+          <dt class="govuk-summary-list__key">CITES Appendix</dt>
+          <dd class="govuk-summary-list__value">
             II
-            </dd>
-            
+          </dd>
         </div>
-        
-
-        
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            GB Annex
-            </dt>
-            <dd class="govuk-summary-list__value">
+          <dt class="govuk-summary-list__key">GB Annex</dt>
+          <dd class="govuk-summary-list__value">
             B
-            </dd>
-            
+          </dd>
         </div>
-        
-
-        
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Source
-            </dt>
-            <dd class="govuk-summary-list__value">
+          <dt class="govuk-summary-list__key">Source</dt>
+          <dd class="govuk-summary-list__value">
             W: Wild
-            </dd>
-            
+          </dd>
         </div>
-        
-
-        
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Purpose
-            </dt>
-            <dd class="govuk-summary-list__value">
+          <dt class="govuk-summary-list__key">Purpose</dt>
+          <dd class="govuk-summary-list__value">
             T: Commercial trade
-            </dd>
-            
+          </dd>
         </div>
-        
-
-        
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Quantity
-            </dt>
-            <dd class="govuk-summary-list__value">
+          <dt class="govuk-summary-list__key">Quantity</dt>
+          <dd class="govuk-summary-list__value">
             1
-            </dd>
-            
+          </dd>
         </div>
-        
-
-        
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Net mass (KG)
-            </dt>
-            <dd class="govuk-summary-list__value">
-            
-            </dd>
-            
+          <dt class="govuk-summary-list__key">Net mass (KG)</dt>
+          <dd class="govuk-summary-list__value">
+          </dd>
         </div>
-        
-
-    </dl>
-
-
-    <h2 class="govuk-heading-s">Re-export history</h2>
-  
-    <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
+      </dl>
+      <h2 class="govuk-heading-s">Re-export history</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Country of last re-export
-            </dt>
-            <dd class="govuk-summary-list__value">
+          <dt class="govuk-summary-list__key">Country of last re-export</dt>
+          <dd class="govuk-summary-list__value">
             Germany
-            </dd>
-            
+          </dd>
         </div>
-        
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Date of issue
-            </dt>
-            <dd class="govuk-summary-list__value">
+          <dt class="govuk-summary-list__key">Date of issue</dt>
+          <dd class="govuk-summary-list__value">
             20 Mar 2026
-            </dd>
-            
+          </dd>
         </div>
-        
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-            Certificate number
-            </dt>
-            <dd class="govuk-summary-list__value">
+          <dt class="govuk-summary-list__key">Certificate number</dt>
+          <dd class="govuk-summary-list__value">
             DE-W 00045/01
-            </dd>
-            
+          </dd>
         </div>
-  
-</dl>
-
-
-    <h2 class="govuk-heading-s">Origin history</h2>
-    
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Country of origin
-    </dt>
-    <dd class="govuk-summary-list__value">
-      Vietnam
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Date of issue
-    </dt>
-    <dd class="govuk-summary-list__value">
-      31 July 2018
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Permit number
-    </dt>
-    <dd class="govuk-summary-list__value">
-      18VN39735/CT-KL
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-
-    <h2 class="govuk-heading-s">Remarks and conditions</h2>
-    
-
-  
-
-  
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Special conditions
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <p class="govuk-body-s govuk-!-margin-bottom-0">This permit is valid only for the specimens and quantities stated. Transport of live animals must follow the current edition of the IATA Live Animals Regulations. A copy of this permit must travel with the consignment. Endorsement by Border Force confirms import clearance against the customs declaration you enter in this service.</p>
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Management Authority
-    </dt>
-    <dd class="govuk-summary-list__value">
-      Animal and Plant Health Agency (APHA)
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Signature and official stamp
-    </dt>
-    <dd class="govuk-summary-list__value">
-      Emma Biggs, Head of International Trade and Customer Service
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Issuing official
-    </dt>
-    <dd class="govuk-summary-list__value">
-      J. Smith
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Place and date of issue
-    </dt>
-    <dd class="govuk-summary-list__value">
-      Bristol, 30 April 2026
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-
-    
-    <div id="endorsement-section">
-    <form method="post" action="/beta-16-04-26/single-search-results/check-permit-details" autocomplete="off">
-      <input type="hidden" name="permit" value="25GBIMPABS719">
-      
-
-
-
-
-
-<h2 class="govuk-heading-s govuk-!-margin-top-8">Enter endorsement details</h2>
-<p class="govuk-body govuk-!-margin-bottom-4">Permit quantity: 1</p>
-
-<div class="govuk-form-group">
-  <label class="govuk-label" for="actualQuantity">Actual imported quantity</label>
-  
-  <input class="govuk-input govuk-input--width-5" id="actualQuantity" name="actualQuantity" type="text" inputmode="numeric" value="">
-</div>
-
-<div class="govuk-form-group">
-  <label class="govuk-label" for="deadOnArrival">Number of animals dead on arrival</label>
-  
-  <input class="govuk-input govuk-input--width-5" id="deadOnArrival" name="deadOnArrival" type="text" inputmode="numeric" maxlength="4" value="">
-</div>
-
-<div class="govuk-form-group">
-  <label class="govuk-label" for="mrnReference">Customs document reference</label>
-  
-  <input class="govuk-input govuk-input--width-20" id="mrnReference" name="mrnReference" type="text" value="" maxlength="18" spellcheck="false" autocapitalize="none" autocomplete="off" aria-describedby="mrnReference-apply-hint">
-  
-  <p class="govuk-hint govuk-!-margin-top-2 customs-reference-actions">
-    <span id="mrnReference-apply-hint" aria-live="polite"></span>
-    <span class="customs-reference-link-wrap">
-      <a href="#" class="govuk-link govuk-link--no-visited-state endorsement-form-action" id="applyReferenceLink" data-permit="25GBIMPABS719">Apply reference to all permits in this shipment</a>
-    </span>
-  </p>
-  
-</div>
-
-      <div class="govuk-button-group govuk-!-margin-top-4">
-        
-        
-<button type="submit" value="Endorse permit" name="endorse" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
-  Endorse permit
-</button>
-
-        <a href="/beta-16-04-26/single-search-results/refuse-permit?permit=25GBIMPABS719" class="govuk-button govuk-button--secondary">Refuse endorsement</a>
-        
+      </dl>
+      <h2 class="govuk-heading-s">Origin history</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Country of origin</dt>
+          <dd class="govuk-summary-list__value">
+            Vietnam
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Date of issue</dt>
+          <dd class="govuk-summary-list__value">
+            31 July 2018
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Permit number</dt>
+          <dd class="govuk-summary-list__value">
+            18VN39735/CT-KL
+          </dd>
+        </div>
+      </dl>
+      <h2 class="govuk-heading-s">Remarks and conditions</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Special conditions</dt>
+          <dd class="govuk-summary-list__value">
+            <p class="govuk-body-s govuk-!-margin-bottom-0">
+              This permit is valid only for the specimens and quantities stated. Transport of live animals must follow the current edition of the IATA Live Animals Regulations. A copy of this permit must travel with the consignment. Endorsement by Border Force confirms import clearance against the customs declaration you enter in this service.
+            </p>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Management Authority</dt>
+          <dd class="govuk-summary-list__value">
+            Animal and Plant Health Agency (APHA)
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Signature and official stamp</dt>
+          <dd class="govuk-summary-list__value">
+            Emma Biggs, Head of International Trade and Customer Service
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Issuing official</dt>
+          <dd class="govuk-summary-list__value">
+            J. Smith
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Place and date of issue</dt>
+          <dd class="govuk-summary-list__value">
+            Bristol, 30 April 2026
+          </dd>
+        </div>
+      </dl>
+      <div id="endorsement-section">
+        <form method="post"
+              action="/beta-16-04-26/single-search-results/check-permit-details"
+              autocomplete="off">
+          <input type="hidden" name="permit" value="25GBIMPABS719">
+          <h2 class="govuk-heading-s govuk-!-margin-top-8">Enter endorsement details</h2>
+          <p class="govuk-body govuk-!-margin-bottom-4">Permit quantity: 1</p>
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="actualQuantity">Actual imported quantity</label>
+            <input class="govuk-input govuk-input--width-5"
+                   id="actualQuantity"
+                   name="actualQuantity"
+                   type="text"
+                   inputmode="numeric"
+                   value="">
+          </div>
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="deadOnArrival">Number of animals dead on arrival</label>
+            <input class="govuk-input govuk-input--width-5"
+                   id="deadOnArrival"
+                   name="deadOnArrival"
+                   type="text"
+                   inputmode="numeric"
+                   maxlength="4"
+                   value="">
+          </div>
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="mrnReference">Customs document reference</label>
+            <input class="govuk-input govuk-input--width-20"
+                   id="mrnReference"
+                   name="mrnReference"
+                   type="text"
+                   value=""
+                   maxlength="18"
+                   spellcheck="false"
+                   autocapitalize="none"
+                   autocomplete="off"
+                   aria-describedby="mrnReference-apply-hint">
+            <p class="govuk-hint govuk-!-margin-top-2 customs-reference-actions">
+              <span id="mrnReference-apply-hint" aria-live="polite"></span>
+              <span class="customs-reference-link-wrap">
+                <a href="#"
+                   class="govuk-link govuk-link--no-visited-state endorsement-form-action"
+                   id="applyReferenceLink"
+                   data-permit="25GBIMPABS719">Apply reference to all permits in this shipment</a>
+              </span>
+            </p>
+          </div>
+          <div class="govuk-button-group govuk-!-margin-top-4">
+            <button type="submit"
+                    value="Endorse permit"
+                    name="endorse"
+                    class="govuk-button"
+                    data-module="govuk-button"
+                    data-govuk-button-init="">Endorse permit</button>
+            <a href="/beta-16-04-26/single-search-results/refuse-permit?permit=25GBIMPABS719"
+               class="govuk-button govuk-button--secondary">Refuse endorsement</a>
+          </div>
+        </form>
       </div>
-    </form>
     </div>
-    
-
   </div>
-</div>
-{% endblock %}
+{% endblock content %}
