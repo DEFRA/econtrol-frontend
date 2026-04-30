@@ -1,5 +1,7 @@
 import { config } from '#/config/config.js'
 
+import { ProxyAgent } from 'proxy-agent';
+
 const proxy = config.get('httpProxy')
 
 export const searchService = (authHeader) => ({
