@@ -1,23 +1,32 @@
+import Boom from '@hapi/boom'
 import { searchService, isValidPermitNumber, isExportNotImport } from '../search/service.js'
 
 export const checkController = {
-  handler(_request, h) {
-    return new Promise((resolve, reject) => {
-      const authHeader = _request.headers["authorization"]
-      const permitRef = _request.query["permit"]
-      if (!isValidPermitNumber(permitRef)) {
-        reject("Error: invalid permit number")
-      }
-      searchService(authHeader).lookupOne(permitRef).then(
-        (r) => r.json().then((result) => {
-          console.log(result)
-          resolve(h.view('check/index', {
-            pageTitle: 'Check',
-            heading: 'Check',
-            permit: {...result, isExportNotImport: isExportNotImport(result.permitNumber)}
-          }))
-        })
-      )
-    })
+  async handler(request, h) {
+    const authHeader = request.headers["authorization"];
+    const permitRef = request.query["permit"];
+
+    if (!isValidPermitNumber(permitRef)) {
+      throw Boom.badRequest("Invalid permit number");
+    }
+
+    try {
+      const response = await searchService(authHeader, fetch).lookupOne(permitRef);
+      const result = await response.json();
+
+      console.log(result);
+
+      return h.view('check/index', {
+        pageTitle: 'Check',
+        heading: 'Check',
+        permit: {
+          ...result,
+          isExportNotImport: isExportNotImport(result.permitNumber)
+        }
+      });
+    } catch (err) {
+      console.error(err);
+      throw Boom.internal("Failed to retrieve permit data");
+    }
   }
 }
