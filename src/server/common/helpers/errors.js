@@ -23,7 +23,8 @@ export function catchAll(request, h) {
   }
 
   const statusCode = response.output.statusCode
-  const errorMessage = statusCodeMessage(statusCode)
+  const statusCodeName = statusCodeMessage(statusCode)
+  const message = response.message
 
   if (statusCode >= statusCodes.internalServerError) {
     request.logger.error(response?.stack)
@@ -31,9 +32,9 @@ export function catchAll(request, h) {
 
   return h
     .view('error/index', {
-      pageTitle: errorMessage,
+      pageTitle: statusCodeName,
       heading: statusCode,
-      message: errorMessage
+      message: (message && `${statusCodeName}: ${message}`) || statusCodeName
     })
     .code(statusCode)
 }

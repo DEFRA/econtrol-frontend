@@ -33,13 +33,14 @@ describe('#catchAll', () => {
   const mockErrorLogger = vi.fn()
   const mockStack = 'Mock error stack'
   const errorPage = 'error/index'
-  const mockRequest = (statusCode) => ({
+  const mockRequest = (statusCode, message) => ({
     response: {
       isBoom: true,
       stack: mockStack,
       output: {
         statusCode
-      }
+      },
+      message
     },
     logger: { error: mockErrorLogger }
   })
@@ -123,4 +124,17 @@ describe('#catchAll', () => {
       statusCodes.internalServerError
     )
   })
+
+  test(`Should provide Boom message if supplied`, () => {
+    catchAll(mockRequest(statusCodes.badRequest, "Foo"), mockToolkit)
+
+    expect(mockErrorLogger).not.toHaveBeenCalledWith(mockStack)
+    expect(mockToolkitView).toHaveBeenCalledWith(errorPage, {
+      pageTitle: 'Bad Request',
+      heading: statusCodes.badRequest,
+      message: 'Bad Request: Foo'
+    })
+    expect(mockToolkitCode).toHaveBeenCalledWith(statusCodes.badRequest)
+  })
+
 })
