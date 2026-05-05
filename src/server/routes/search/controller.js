@@ -1,4 +1,4 @@
-import { isValidPermitNumber, isExportNotImport, mapStatusLabel } from '#/server/common/utils.js'
+import { isValidPermitNumber, isExportNotImport, mapStatusLabel, formatDate } from '#/server/common/utils.js'
 import { searchService } from './service.js'
 
 export const searchController = {
@@ -30,6 +30,7 @@ export const resultsController = {
       return {
         ...json,
         statusLabel: mapStatusLabel(json.statusLabel),
+        validityDate: formatDate(new Date(json.validityDate)),
         isExportNotImport: isExportNotImport(json.permitNumber)
       };
     }));

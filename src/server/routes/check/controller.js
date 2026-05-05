@@ -1,6 +1,6 @@
 import Boom from '@hapi/boom'
 import { searchService } from '../search/service.js'
-import { mapStatusLabel, isValidPermitNumber, isExportNotImport } from '#/server/common/utils.js';
+import { mapStatusLabel, isValidPermitNumber, isExportNotImport, formatDate } from '#/server/common/utils.js';
 
 export const checkController = {
   async handler(request, h) {
@@ -23,6 +23,7 @@ export const checkController = {
         permit: {
           ...result,
           statusLabel: mapStatusLabel(result.statusLabel),
+          validityDate: formatDate(new Date(result.validityDate)),
           isExportNotImport: isExportNotImport(result.permitNumber)
         }
       });

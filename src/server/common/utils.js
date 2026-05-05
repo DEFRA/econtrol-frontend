@@ -10,3 +10,13 @@ export function isValidPermitNumber(permitNumber) {
 export function isExportNotImport(validPermitNumber) {
   return validPermitNumber.slice(4, 7) === "EXP"
 }
+
+export function formatDate(date) {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  }).format(date)
+}
+
