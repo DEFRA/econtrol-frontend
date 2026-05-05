@@ -1,4 +1,4 @@
-export const searchService = (authHeader) => ({
+export const searchService = (authHeader, fetch) => ({
   lookupOne(permitNumber) {
     return fetch('https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_SearchPermitByNumber', {
       method: 'POST',
@@ -13,11 +13,11 @@ export const searchService = (authHeader) => ({
     });
   },
   async lookupMany(permitNumbers) {
-    const rs = permitNumbers.map((pn) => ({ [pn]: this.lookupOne(pn) }));
-    const obj = rs.reduce((acc, cur) => ({ ...acc, ...cur }), {});
-    return Promise.all(
-      Object.entries(obj).map(async ([k, v]) => [k, await v])
-    ).then(Object.fromEntries);
+    const uniquePermitNumbers = [...new Set(permitNumbers)];
+    const entries = await Promise.all(
+      uniquePermitNumbers.map(async (pn) => [pn, await this.lookupOne(pn)])
+    );
+    return Object.fromEntries(entries);
   }
 })
 

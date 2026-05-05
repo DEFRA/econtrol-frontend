@@ -10,7 +10,7 @@ export const searchController = {
 }
 
 export const resultsController = {
-   async handler(request, h) {
+  async handler(request, h) {
     const authHeader = request.headers["authorization"];
     const payload = request.payload["permitReferences"] || "";
 
@@ -19,7 +19,7 @@ export const resultsController = {
       .map(s => s.trim())
       .filter(isValidPermitNumber);
 
-    const permitResponses = await searchService(authHeader).lookupMany(references);
+    const permitResponses = await searchService(authHeader, fetch).lookupMany(references);
 
 
     console.log(permitResponses)
@@ -32,7 +32,7 @@ export const resultsController = {
         isExportNotImport: isExportNotImport(json.permitNumber)
       };
     }));
-    
+
     const errors = Object.entries(permitResponses).filter(([k, v]) => !v.ok).map(([k, v]) => k);
 
     console.log(results);
