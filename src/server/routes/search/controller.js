@@ -1,4 +1,5 @@
-import { searchService, isValidPermitNumber, isExportNotImport } from './service.js'
+import { isValidPermitNumber, isExportNotImport, mapStatusLabel } from '#/server/common/utils.js'
+import { searchService } from './service.js'
 
 export const searchController = {
   handler(_request, h) {
@@ -21,7 +22,6 @@ export const resultsController = {
 
     const permitResponses = await searchService(authHeader, fetch).lookupMany(references);
 
-
     console.log(permitResponses)
 
     const results = await Promise.all(Object.values(permitResponses).filter((v) => v.ok).map(async (r) => {
@@ -29,6 +29,7 @@ export const resultsController = {
       console.log(json)
       return {
         ...json,
+        statusLabel: mapStatusLabel(json.statusLabel),
         isExportNotImport: isExportNotImport(json.permitNumber)
       };
     }));
