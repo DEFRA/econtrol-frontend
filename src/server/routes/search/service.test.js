@@ -1,6 +1,5 @@
-
-import { searchService } from '#/server/routes/search/service.js'
-import { describe, test, expect, vi } from 'vitest'
+import { searchService } from './service.js';
+import { describe, test, expect, vi } from 'vitest';
 
 describe('searchService', () => {
   let service

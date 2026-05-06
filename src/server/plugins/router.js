@@ -1,5 +1,6 @@
 import inert from '@hapi/inert'
 
+import { auth } from '../routes/auth/index.js'
 import { search } from '../routes/search/index.js'
 import { check } from '../routes/check/index.js'
 import { health } from '../routes/health/index.js'
@@ -16,7 +17,7 @@ export const router = {
       await server.register([health])
 
       // Application specific routes, add your own routes here
-      await server.register([search, check])
+      await server.register([auth, search, check])
 
       // Static assets
       if (!config.get('isProduction') && !config.get('isTest')) {
