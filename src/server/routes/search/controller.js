@@ -2,7 +2,13 @@ import { isValidPermitNumber, isExportNotImport, mapStatusLabel, formatDate } fr
 import { searchService } from './service.js'
 
 export const searchController = {
-  handler(_request, h) {
+  handler(request, h) {
+    // if request contains code/session_state then it's localhost auth callback so redirect to auth/callback :)
+    if (request.query.code && request.query.session_state) {
+      console.log(request.query)
+      return h.redirect(`/auth/callback?code=${request.query.code}&session_state=${request.query.session_state}`)
+    }
+
     return h.view('search/index', {
       pageTitle: 'Search',
       heading: 'Search'
