@@ -14,7 +14,13 @@ export const authentication = {
         rateLimit: true,
         jwksRequestsPerMinute: 5,
         jwksUri: `https://login.microsoftonline.com/common/discovery/v2.0/keys`,
-        requestAgent: new ProxyAgent()
+        fetcher: async (jwksUri) => {
+          const response = await fetch(jwksUri);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch JWKS: ${response.statusText}`);
+          }
+          return await response.json();
+        }
       });
 
       server.auth.strategy('azure-ad-jwt', 'jwt', {
