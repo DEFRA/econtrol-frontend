@@ -7,7 +7,7 @@ describe('searchService', () => {
 
   beforeAll(async () => {
     mockFetch = vi.fn()
-    service = searchService("TEST_AUTH_HEADER", mockFetch)
+    service = searchService("TEST_AUTH_TOKEN", mockFetch)
   })
 
   afterAll(async () => {
@@ -20,7 +20,7 @@ describe('searchService', () => {
         'https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_SearchPermitByNumber', {
         method: 'POST',
         headers: {
-          "Authorization": "TEST_AUTH_HEADER",
+          "Authorization": "Bearer TEST_AUTH_TOKEN",
           "Accept": "application/json",
           "Content-Type": "application/json",
           "OData-MaxVersion": "4.0",
@@ -39,7 +39,7 @@ describe('searchService', () => {
         'https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_SearchPermitByNumber', {
         method: 'POST',
         headers: {
-          "Authorization": "TEST_AUTH_HEADER",
+          "Authorization": "Bearer TEST_AUTH_TOKEN",
           "Accept": "application/json",
           "Content-Type": "application/json",
           "OData-MaxVersion": "4.0",
@@ -51,7 +51,7 @@ describe('searchService', () => {
         'https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_SearchPermitByNumber', {
         method: 'POST',
         headers: {
-          "Authorization": "TEST_AUTH_HEADER",
+          "Authorization": "Bearer TEST_AUTH_TOKEN",
           "Accept": "application/json",
           "Content-Type": "application/json",
           "OData-MaxVersion": "4.0",

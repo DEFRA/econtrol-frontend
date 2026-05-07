@@ -12,15 +12,16 @@ export const searchController = {
 
 export const resultsController = {
   async handler(request, h) {
-    const authHeader = request.headers["authorization"];
     const payload = request.payload["permitReferences"] || "";
+
+    const token = request.auth.credentials.token
 
     const references = payload
       .split('\n')
       .map(s => s.trim())
       .filter(isValidPermitNumber);
 
-    const permitResponses = await searchService(authHeader, fetch).lookupMany(references);
+    const permitResponses = await searchService(token, fetch).lookupMany(references);
 
     console.log(permitResponses)
 

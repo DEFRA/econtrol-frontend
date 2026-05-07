@@ -16,7 +16,14 @@ describe('#searchController', () => {
   test('Should provide expected response', async () => {
     const { result, statusCode } = await server.inject({
       method: 'GET',
-      url: '/'
+      url: '/',
+      auth: {
+        strategy: 'azure-ad-jwt',
+        credentials: {
+          decoded: {},
+          token: ""
+        }
+      }
     })
 
     expect(result).toEqual(expect.stringContaining('Search |'))

@@ -19,6 +19,7 @@ export const router = {
       // Application specific routes, add your own routes here
       await server.register([auth, search, check])
 
+
       // Static assets
       if (!config.get('isProduction') && !config.get('isTest')) {
         await (async () => {
@@ -32,8 +33,8 @@ export const router = {
             plugin: (await import('@defra/hapi-connect')).default,
             options: {
               path: '/public',
-              middleware: [vite.middlewares]
-            }
+              middleware: [vite.middlewares],
+            },
           })
         })()
       } else {

@@ -2,4 +2,12 @@
 {% extends 'layouts/page.njk' %}
 
 {% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <h1 class="govuk-heading-l">Login</h1>
+    <p>This is a temporary login mechanism for people on the eCITES team until CCoE make a decision =)</p>
+    <a href="https://login.microsoftonline.com/common/oauth2/authorize?resource=https://org99791a21.crm11.dynamics.com/&client_id={{clientId}}&response_type=token&response_mode=form_post&redirect_uri={{redirectUri}}">Login with Microsoft Account</a>
+  </div>
+</div>
 {% endblock %}

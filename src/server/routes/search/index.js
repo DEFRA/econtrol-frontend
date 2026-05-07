@@ -18,7 +18,7 @@ export const search = {
       server.route([
         {
           method: 'POST',
-          path: '/',
+          path: '/results',
           ...resultsController
         }
       ])

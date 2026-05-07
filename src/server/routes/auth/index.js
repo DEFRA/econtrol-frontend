@@ -1,5 +1,4 @@
-
-import { loginController, callbackController } from './controller.js'
+import { loginPageController, callbackController } from './controller.js'
 
 export const auth = {
   plugin: {
@@ -9,14 +8,32 @@ export const auth = {
         {
           method: 'GET',
           path: '/auth/login',
-          ...loginController
+          ...loginPageController,
+          options: {
+            auth: false,
+          }
         }
       ])
       server.route([
         {
-          method: 'GET',
+          method: 'POST',
           path: '/auth/callback',
-          ...callbackController
+          ...callbackController,
+          options: {
+            auth: false,
+          }
+        }
+      ])
+      // Register POST route at / for localhost callback
+      // This should be changed at some point...
+      server.route([
+        {
+          method: 'POST',
+          path: '/',
+          ...callbackController,
+          options: {
+            auth: false,
+          }
         }
       ])
     }

@@ -4,15 +4,16 @@ import { mapStatusLabel, isValidPermitNumber, isExportNotImport, formatDate } fr
 
 export const checkController = {
   async handler(request, h) {
-    const authHeader = request.headers["authorization"];
     const permitRef = request.query["permit"];
+
+    const token = request.auth.credentials.token
 
     if (!isValidPermitNumber(permitRef)) {
       throw Boom.badRequest("Invalid permit number");
     }
 
-    try {
-      const response = await searchService(authHeader, fetch).lookupOne(permitRef);
+    const response = await searchService(token, fetch).lookupOne(permitRef);
+    if (response.ok) {
       const result = await response.json();
 
       console.log(result);
@@ -27,9 +28,14 @@ export const checkController = {
           isExportNotImport: isExportNotImport(result.permitNumber)
         }
       });
-    } catch (err) {
-      console.error(err);
-      throw Boom.internal("Failed to retrieve permit data");
+    } else {
+      console.log(request)
+      switch (response.status) {
+        case 401: {
+          console.log("401 received from Pegasus")
+          //return h.redirect("/auth/login")
+        }
+      }
     }
   }
 }

@@ -13,6 +13,9 @@ const isProduction = process.env.NODE_ENV === 'production'
 const isTest = process.env.NODE_ENV === 'test'
 const isDevelopment = process.env.NODE_ENV === 'development'
 
+// CDP environment. If not set, assume local
+const environment = process.env.ENVIRONMENT || "local"
+
 convict.addFormats(convictFormatWithValidator)
 
 export const config = convict({
@@ -213,6 +216,25 @@ export const config = convict({
       format: String,
       default: 'x-cdp-request-id',
       env: 'TRACING_HEADER'
+    }
+  }, oauth: {
+    clientId: {
+      doc: 'OAuth2 client ID',
+      format: String,
+      default: ({
+        local: "5b05b115-fdd0-466e-a44a-b122e210057f",
+        dev: "5b05b115-fdd0-466e-a44a-b122e210057f",
+        test: "a850de38-df79-478e-a0a5-631d7451c7c7"
+      }[environment])
+    },
+    redirectUri: {
+      doc: 'OAuth2 redirect URI',
+      format: String,
+      default: ({
+        local: "http://localhost/",
+        dev: "https://econtrol-frontend.dev.cdp-int.defra.cloud/auth/callback",
+        test: "https://econtrol-frontend.test.cdp-int.defra.cloud/auth/callback",
+      }[environment])
     }
   }
 })
