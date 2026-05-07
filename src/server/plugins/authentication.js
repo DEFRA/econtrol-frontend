@@ -1,5 +1,6 @@
 import Jwt from '@hapi/jwt';
 import JwksRsa from 'jwks-rsa';
+import { ProxyAgent } from 'proxy-agent';
 
 export const authentication = {
   plugin: {
@@ -12,7 +13,8 @@ export const authentication = {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: `https://login.microsoftonline.com/common/discovery/v2.0/keys`
+        jwksUri: `https://login.microsoftonline.com/common/discovery/v2.0/keys`,
+        requestAgent: new ProxyAgent()
       });
 
       server.auth.strategy('azure-ad-jwt', 'jwt', {
