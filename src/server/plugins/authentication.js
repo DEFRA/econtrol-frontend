@@ -24,6 +24,7 @@ export const authentication = {
             throw new Error('Missing key ID (kid) in token header');
           }
           console.log("Decoded:" + JSON.stringify(decoded))
+          console.log(`Getting signing key for kid: ${header.kid}`)
           const key = await jwksClient.getSigningKey(header.kid);
           return { key: key.getPublicKey(), algorithms: ['RS256'] };
         },
