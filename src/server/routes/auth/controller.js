@@ -22,6 +22,7 @@ export const callbackController = {
       return h.redirect(`/`).state('econtrol-auth', request.payload.access_token, {
         // This should probably be changed in production...
         // It's only to get around the cross-site POST to GET cookie set issue
+        path: '/',
         isSameSite: 'Lax',
         isSecure: true,
         encoding: 'none'
