@@ -1,12 +1,11 @@
 import Jwt from '@hapi/jwt';
 import JwksRsa from 'jwks-rsa';
-import { ProxyAgent } from 'proxy-agent';
 
 export const authentication = {
   plugin: {
     name: 'authentication',
     version: '0.1.0',
-    register: async (server, options) => {
+    register: async (server, _options) => {
       await server.register(Jwt);
 
       const jwksClient = JwksRsa({
@@ -26,7 +25,7 @@ export const authentication = {
       server.auth.strategy('azure-ad-jwt', 'jwt', {
         cookieName: 'econtrol-auth',
 
-        keys: async ({ token, decoded }) => {
+        keys: async ({ decoded }) => {
           const header = decoded.header;
           if (!header || !header.kid) {
             throw new Error('Missing key ID (kid) in token header');
@@ -46,7 +45,7 @@ export const authentication = {
           nbf: true,
           exp: true
         },
-        validate: (artifacts, request) => {
+        validate: (artifacts, _request) => {
           console.log("validated")
           return {
             isValid: true,
@@ -57,6 +56,7 @@ export const authentication = {
           };
         }
       });
+
       server.auth.default('azure-ad-jwt');
 
       server.ext('onPreResponse', (request, h) => {
