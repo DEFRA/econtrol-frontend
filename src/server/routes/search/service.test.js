@@ -13,6 +13,40 @@ describe('searchService', () => {
   afterAll(async () => {
   })
 
+  describe('endorseOne', () => {
+    test('calls fetch', async () => {
+      await service.endorseOne("TEST_PERMIT_ID", {
+        animalsDoa: 2,
+        mrn: "TEST_MRN_NUMBER",
+        officerEpauletteNumber: "TEST_OFFICE_EPAULETTE",
+        tradeDate: new Date("2026-05-10"),
+        port: "TEST_PORT"
+      })
+      expect(mockFetch).toHaveBeenCalledExactlyOnceWith(
+        'https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_EndorsePermit', {
+        method: 'POST',
+        headers: {
+          "Authorization": "Bearer TEST_AUTH_TOKEN",
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "OData-MaxVersion": "4.0",
+          "OData-Version": "4.0"
+        },
+        body: JSON.stringify({
+          "permitId": "TEST_PERMIT_ID",
+          //"cites_quantityreturned": 10.5,
+          //"cites_netmassreturned": 25.2,
+          //"cites_unitreturned": 149900001,
+          "cites_NumberofanimalsDOA": 2,
+          "cites_MovementReferenceNumberMRN": "TEST_MRN_NUMBER",
+          "cites_tradedate": "2026-05-10",
+          "cites_CustomsOfficerEpauletteNumber": "TEST_OFFICE_EPAULETTE",
+          "cites_Port": "TEST_PORT"
+        })
+      });
+    })
+  })
+
   describe('lookupOne', () => {
     test('calls fetch', async () => {
       await service.lookupOne("TEST_PERMIT_NUMBER")
