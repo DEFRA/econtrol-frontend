@@ -14,13 +14,20 @@ export const search = {
         {
           method: 'GET',
           path: '/',
+          handler: (_, h) => h.redirect('/search')
+        }
+      ])
+      server.route([
+        {
+          method: 'GET',
+          path: '/search',
           ...searchController
         }
       ])
       server.route([
         {
           method: 'POST',
-          path: '/results',
+          path: '/search-results',
           ...resultsController(searchService)
         }
       ])

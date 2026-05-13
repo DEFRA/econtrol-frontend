@@ -25,7 +25,7 @@
           {% else %}
           <p class="govuk-body govuk-!-margin-bottom-2">No permit numbers could be found.</p>
           {% endif %}
-          <p class="govuk-body govuk-!-margin-bottom-0"><a href="/" class="govuk-link govuk-link--no-visited-state">Change your search</a></p>
+          <p class="govuk-body govuk-!-margin-bottom-0"><a href="/search" class="govuk-link govuk-link--no-visited-state">Change your search</a></p>
         </div>
       </div>
     </div>
@@ -57,14 +57,14 @@
           <td class="govuk-table__cell">?</td>
           <td class="govuk-table__cell">{{ result.validityDate }}</td>
           <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">{{ result.statusLabel }}</strong></td>
-          <td class="govuk-table__cell"><a href="/permit/{{ result.permitNumber }}/check" class="govuk-link">Check permit</a></td>
+          <td class="govuk-table__cell"><a href="/check-permit-details?permitNumber={{ result.permitNumber }}" class="govuk-link">Check permit</a></td>
         </tr>
 {% endfor %}
       </tbody>
     </table>
 
     <p class="govuk-body">
-      <a href="/" class="govuk-link govuk-link--no-visited-state">Back to search</a>
+      <a href="/search" class="govuk-link govuk-link--no-visited-state">Back to search</a>
     </p>
 {% endif %}
 
