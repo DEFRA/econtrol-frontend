@@ -1,5 +1,7 @@
 import { searchController, resultsController } from './controller.js'
 
+import { searchService } from './service.js'
+
 /**
  * Sets up the routes used in the home page.
  * These routes are registered in src/server/router.js.
@@ -19,7 +21,7 @@ export const search = {
         {
           method: 'POST',
           path: '/results',
-          ...resultsController
+          ...resultsController(searchService)
         }
       ])
     }
