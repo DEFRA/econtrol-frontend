@@ -16,8 +16,8 @@ describe('searchService', () => {
   describe('endorseOne', () => {
     test('calls fetch', async () => {
       await service.endorseOne("TEST_PERMIT_ID", {
-        animalsDoa: 2,
-        mrn: "TEST_MRN_NUMBER",
+        deadOnArrival: 2,
+        mrnReference: "TEST_MRN_NUMBER",
         officerEpauletteNumber: "TEST_OFFICE_EPAULETTE",
         tradeDate: new Date("2026-05-10"),
         port: "TEST_PORT"

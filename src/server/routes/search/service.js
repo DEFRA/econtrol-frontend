@@ -19,7 +19,7 @@ export const searchService = (authHeader, fetch) => ({
     );
     return Object.fromEntries(entries);
   },
-  async endorseOne(permitId, permitDetails) {
+  endorseOne(permitId, permitDetails) {
     return fetch('https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_EndorsePermit', {
       method: 'POST',
       headers: {
@@ -34,10 +34,9 @@ export const searchService = (authHeader, fetch) => ({
         //"cites_quantityreturned": 10.5,
         //"cites_netmassreturned": 25.2,
         //"cites_unitreturned": 149900001,
-        "cites_NumberofanimalsDOA": permitDetails.animalsDoa,
-        "cites_MovementReferenceNumberMRN": permitDetails.mrn,
+        "cites_NumberofanimalsDOA": permitDetails.deadOnArrival,
+        "cites_MovementReferenceNumberMRN": permitDetails.mrnReference,
         "cites_tradedate": permitDetails.tradeDate.toISOString().substring(0, 10),
-        "cites_CustomsOfficerEpauletteNumber": permitDetails.officerEpauletteNumber,
         "cites_Port": permitDetails.port
       })
     })

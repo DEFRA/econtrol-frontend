@@ -52,7 +52,7 @@
           <td class="govuk-table__cell">?</td>
           <td class="govuk-table__cell">{{ result.validityDate }}</td>
           <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">{{ result.statusLabel }}</strong></td>
-          <td class="govuk-table__cell"><a href="/check?permit={{ result.permitNumber }}" class="govuk-link">Check permit</a></td>
+          <td class="govuk-table__cell"><a href="/permit/{{ result.permitNumber }}/check" class="govuk-link">Check permit</a></td>
         </tr>
 {% endfor %}
       </tbody>

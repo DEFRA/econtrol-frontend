@@ -212,10 +212,8 @@
         </div>
       </dl>
       <div id="endorsement-section">
-        <form method="post"
-              action="/beta-16-04-26/single-search-results/check-permit-details"
-              autocomplete="off">
-          <input type="hidden" name="permit" value="25GBIMPABS719">
+        <form method="post" action="/permit/{{ permit.permitNumber }}/endorse" autocomplete="off">
+          <input type="hidden" name="permitId" value="{{ permit.permitId }}">
           <h2 class="govuk-heading-s govuk-!-margin-top-8">Enter endorsement details</h2>
           <p class="govuk-body govuk-!-margin-bottom-4">Permit quantity: 1</p>
           <div class="govuk-form-group">
@@ -255,7 +253,7 @@
                 <a href="#"
                    class="govuk-link govuk-link--no-visited-state endorsement-form-action"
                    id="applyReferenceLink"
-                   data-permit="25GBIMPABS719">Apply reference to all permits in this shipment</a>
+                   data-permit="{{ permit.permitNumber }}">Apply reference to all permits in this shipment</a>
               </span>
             </p>
           </div>
@@ -266,7 +264,7 @@
                     class="govuk-button"
                     data-module="govuk-button"
                     data-govuk-button-init="">Endorse permit</button>
-            <a href="/beta-16-04-26/single-search-results/refuse-permit?permit=25GBIMPABS719"
+            <a href="/permit/{{ permit.permitId }}/refuse"
                class="govuk-button govuk-button--secondary">Refuse endorsement</a>
           </div>
         </form>

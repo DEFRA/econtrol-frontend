@@ -1,4 +1,4 @@
-import { checkController } from './controller.js'
+import { checkController, endorseController } from './controller.js'
 
 /**
  * Sets up the routes used in the home page.
@@ -11,8 +11,13 @@ export const check = {
       server.route([
         {
           method: 'GET',
-          path: '/check',
+          path: '/permit/{permitNumber}/check',
           ...checkController
+        },
+        {
+          method: 'POST',
+          path: '/permit/{permitNumber}/endorse',
+          ...endorseController
         }
       ])
     }

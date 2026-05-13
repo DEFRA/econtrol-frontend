@@ -4,15 +4,16 @@ import { mapStatusLabel, isValidPermitNumber, isExportNotImport, formatDate } fr
 
 export const checkController = {
   async handler(request, h) {
-    const permitRef = request.query["permit"];
 
     const token = request.auth.credentials.token
 
-    if (!isValidPermitNumber(permitRef)) {
+    const permitNumber = request.params.permitNumber;
+
+    if (!isValidPermitNumber(permitNumber)) {
       throw Boom.badRequest("Invalid permit number");
     }
 
-    const response = await searchService(token, fetch).lookupOne(permitRef);
+    const response = await searchService(token, fetch).lookupOne(permitNumber);
     if (response.ok) {
       const result = await response.json();
 
@@ -36,6 +37,33 @@ export const checkController = {
           //return h.redirect("/auth/login")
         }
       }
+    }
+  }
+}
+
+export const endorseController = {
+  async handler(request, h) {
+    const token = request.auth.credentials.token
+
+    const permitNumber = request.params.permitNumber;
+
+    if (!isValidPermitNumber(permitNumber)) {
+      throw Boom.badRequest("Invalid permit number");
+    }
+
+    const update = {
+      ...request.payload,
+      tradeDate: new Date()
+    }
+
+    const response = await searchService(token, fetch).endorseOne(request.payload.permitId, update);
+    console.log(`PEGASUS ENDORSE RES: ${JSON.stringify(response)}`)
+
+    if (response.ok) {
+      return h.redirect(`/permit/${permitNumber}/check`);
+    } else {
+      var error = new Error('Unexpected error');
+      throw Boom.boomify(error, { statusCode: response.status });
     }
   }
 }
