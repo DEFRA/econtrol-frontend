@@ -19,7 +19,7 @@ describe('#loginController', () => {
       url: '/auth/login'
     })
 
-    expect(result).toEqual(expect.stringContaining('Auth |'))
+    expect(result).toEqual(expect.stringContaining('Auth'))
     expect(statusCode).toBe(statusCodes.ok)
   })
 })

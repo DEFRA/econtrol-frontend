@@ -7,7 +7,7 @@ export const checkController = {
 
     const token = request.auth.credentials.token
 
-    const permitNumber = request.params.permitNumber;
+    const permitNumber = request.query.permitNumber;
 
     if (!isValidPermitNumber(permitNumber)) {
       throw Boom.badRequest("Invalid permit number");
@@ -20,7 +20,7 @@ export const checkController = {
       console.log(result);
 
       return h.view('check/index', {
-        pageTitle: 'Check',
+        pageTitle: 'Check permit details',
         heading: 'Check',
         permit: {
           ...result,

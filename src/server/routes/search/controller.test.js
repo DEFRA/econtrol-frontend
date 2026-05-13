@@ -18,7 +18,7 @@ describe('#searchController', () => {
   test('Should provide expected response', async () => {
     const { result, statusCode } = await server.inject({
       method: 'GET',
-      url: '/',
+      url: '/search',
       auth: {
         strategy: 'azure-ad-jwt',
         credentials: {
@@ -28,7 +28,7 @@ describe('#searchController', () => {
       }
     })
 
-    expect(result).toEqual(expect.stringContaining('Search |'))
+    expect(result).toEqual(expect.stringContaining('Search for CITES permits'))
     expect(statusCode).toBe(statusCodes.ok)
   })
 })
@@ -79,7 +79,7 @@ describe('#resultsController', () => {
         "bananas"
       ],
       "heading": "Results",
-      "pageTitle": "Results",
+      "pageTitle": "Permit search results",
       "results": [{
         validityDate: "10 May 2026",
         permitNumber: "25GBIMPUA93QA",

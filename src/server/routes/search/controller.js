@@ -4,7 +4,7 @@ import _ from 'lodash'
 export const searchController = {
   handler(_request, h) {
     return h.view('search/index', {
-      pageTitle: 'Search',
+      pageTitle: 'Search for CITES permits',
       heading: 'Search'
     })
   }
@@ -37,7 +37,7 @@ export const resultsController = (searchService) => ({
     const errors = [...Object.entries(permits).filter(([_, v]) => !v.ok).map(([k, _]) => k), ...invalid];
 
     return h.view('search/results', {
-      pageTitle: 'Results',
+      pageTitle: 'Permit search results',
       heading: 'Results',
       results,
       errors,

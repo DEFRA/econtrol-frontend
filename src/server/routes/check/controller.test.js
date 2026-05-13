@@ -26,7 +26,7 @@ describe('#searchController', () => {
       }
     })
 
-    expect(result).toEqual(expect.stringContaining('Search |'))
+    expect(result).toEqual(expect.stringContaining('Search for CITES permits'))
     expect(statusCode).toBe(statusCodes.ok)
   })
 })

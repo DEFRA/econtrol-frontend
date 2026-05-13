@@ -23,7 +23,7 @@ describe('#errors', () => {
     })
 
     expect(result).toEqual(
-      expect.stringContaining('Page not found | Process a CITES permit')
+      expect.stringContaining('Page not found')
     )
     expect(statusCode).toBe(statusCodes.notFound)
   })

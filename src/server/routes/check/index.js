@@ -11,7 +11,7 @@ export const check = {
       server.route([
         {
           method: 'GET',
-          path: '/permit/{permitNumber}/check',
+          path: '/check-permit-details',
           ...checkController
         },
         {
