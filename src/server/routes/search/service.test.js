@@ -18,7 +18,7 @@ describe('searchService', () => {
       await service.endorseOne("TEST_PERMIT_ID", {
         deadOnArrival: 2,
         mrnReference: "TEST_MRN_NUMBER",
-        officerEpauletteNumber: "TEST_OFFICE_EPAULETTE",
+        //officerEpauletteNumber: "TEST_OFFICE_EPAULETTE",
         tradeDate: new Date("2026-05-10"),
         port: "TEST_PORT"
       })
@@ -40,7 +40,7 @@ describe('searchService', () => {
           "cites_NumberofanimalsDOA": 2,
           "cites_MovementReferenceNumberMRN": "TEST_MRN_NUMBER",
           "cites_tradedate": "2026-05-10",
-          "cites_CustomsOfficerEpauletteNumber": "TEST_OFFICE_EPAULETTE",
+          //"cites_CustomsOfficerEpauletteNumber": "TEST_OFFICE_EPAULETTE",
           "cites_Port": "TEST_PORT"
         })
       });

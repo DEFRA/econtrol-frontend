@@ -16,7 +16,7 @@ describe('#authentication', () => {
   test.each`
   path
   ${"/"}
-  ${"/check"}
+  ${"/permit/test/check"}
       `('$path redirects to login when not authenticated', async ({ path }) => {
     const resp = await server.inject({
       method: 'GET',
@@ -30,7 +30,7 @@ describe('#authentication', () => {
   test.each`
   path
   ${"/"}
-      `('$path returns 200 when not authenticated', async ({ path }) => {
+      `('$path returns 200 when authenticated', async ({ path }) => {
     const resp = await server.inject({
       method: 'GET',
       url: path,
