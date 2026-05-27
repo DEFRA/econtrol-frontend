@@ -91,7 +91,7 @@ describe('searchService', () => {
     `('maps permit status $pegasusStatus to $expectedLabel when date is $currentDate and expiry is $expiryDate',
       async ({ pegasusStatus, expectedLabel, currentDate, expiryDate }) => {
         vi.setSystemTime(new Date(currentDate))
-        mockFetch.mockResolvedValue({
+        mockFetch.mockResolvedValueOnce({
           ok: true,
           json: async () => ({
             statusLabel: pegasusStatus,
@@ -105,10 +105,32 @@ describe('searchService', () => {
           expect.fail("Did not return successful result")
         }
       });
+
+    test('draft permits are treated as a lookup error', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          statusLabel: "Draft"
+        })
+      });
+      const result = await service.lookupOne("TEST_PERMIT_NUMBER");
+      if (!result.ok) {
+        expect(result.error).toEqual("Draft");
+      } else {
+        expect.fail("Expected unsuccessful result")
+      }
+
+    })
   })
 
   describe('lookupMany', async () => {
     test('calls fetch once per unique permit number', async () => {
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          statusLabel: "Issued"
+        })
+      });
       await service.lookupMany(["TEST1", "TEST2", "TEST1"])
       expect(mockFetch).toHaveBeenCalledTimes(2)
       expect(mockFetch).toHaveBeenCalledWith(
