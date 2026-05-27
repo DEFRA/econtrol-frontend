@@ -1,5 +1,6 @@
-import { isValidPermitNumber, isExportNotImport, mapStatusLabel, formatDate } from '#/server/common/utils.js'
+import { isValidPermitNumber, isExportNotImport, formatDate } from '#/server/common/utils.js'
 import _ from 'lodash'
+import { PermitStatus } from './service.js'
 
 export const searchController = {
   /**
@@ -38,6 +39,21 @@ export const resultsController = (searchService) => ({
 
     const permits = await searchService(token, fetch).lookupMany(valid);
 
+    /**
+     * @param {typeof PermitStatus[keyof typeof PermitStatus]} statusLabel
+     * @returns {'red' | 'green' | 'blue'}
+     */
+    const statusLabelColour = (statusLabel) => {
+      switch (statusLabel) {
+        case "Valid":
+          return "blue"
+        case "Endorsed":
+          return "green"
+        default:
+          return "red"
+      }
+    }
+
     const results = await Promise.all(Object.values(permits).filter((v) => v.ok).map(async (r) => {
       const permit = r.value;
       return {
@@ -45,6 +61,7 @@ export const resultsController = (searchService) => ({
         permitNumber: permit.permitNumber,
         scientificName: permit.scientificName,
         statusLabel: permit.status,
+        statusLabelColour: statusLabelColour(permit.status),
         validityDate: formatDate(new Date(permit.validityDate)),
         isExportNotImport: isExportNotImport(permit.permitNumber)
       };

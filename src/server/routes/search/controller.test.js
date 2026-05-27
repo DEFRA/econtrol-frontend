@@ -102,6 +102,7 @@ describe('#resultsController', () => {
         permitId: "577cde72-1db3-4a37-8333-34ae0f8ac4be",
         permitNumber: "25GBIMPUA93QA",
         statusLabel: "Valid",
+        statusLabelColour: "blue",
         validityDate: "10 May 2026",
         scientificName: "Scientific name",
         isExportNotImport: false
