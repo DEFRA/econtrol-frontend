@@ -9,18 +9,37 @@
  */
 
 /**
+ * HTTP Error
+ * @typedef {Object} HttpError
+ * @property {number} status
+ */
+
+/**
+ * Bad Permit. Currently Draft permits are deemed "bad" and we'd like to treat
+ * it like a lookup error.
+ * @typedef {"Draft"} BadPermit
+ */
+
+/**
+ * Error while looking up a permit. Either HTTP status code or service-level
+ * error because the data returned does not meet certain critera.
+ * @typedef {HttpError | BadPermit} PermitLookupError
+ */
+
+/**
  * An instance of search service closed over API key and fetch implementation
  * @typedef {Object} SearchService
- * @property {(permitNumber: string) => Promise<Either<string, PermitDetails>>} lookupOne
- * @property {(permitNumbers: Array<string>) => Promise<Record<string, Either<string, PermitDetails>>>} lookupMany
- * @property {(endorsePermit: EndorsePermit) => Promise<Either<string, PermitDetails>>}  endorseOne
+ * @property {(permitNumber: string) => Promise<Either<PermitLookupError, PermitDetails>>} lookupOne
+ * @property {(permitNumbers: Array<string>) => Promise<Record<string, Either<PermitLookupError, PermitDetails>>>} lookupMany
+ * @property {(endorsePermit: EndorsePermit) => Promise<Either<HttpError, PermitDetails>>}  endorseOne
  */
 
 /**
 * Represents a failed service operation (Left).
+* @template E
 * @typedef {Object} LeftFailure
 * @property {false} ok
-* @property {number} status
+* @property {E} error
 */
 
 /**
@@ -34,8 +53,9 @@
 /**
  * A functional Either wrapper union for clean error handling.
  * @template E, T
- * @typedef {LeftFailure | RightSuccess<T>} Either
+ * @typedef {LeftFailure<E> | RightSuccess<T>} Either
  */
+
 
 /**
  * Permit details as represented by Pegasus
@@ -174,19 +194,25 @@ export const searchService = (authHeader, fetch) => ({
       body: JSON.stringify({ "permitNumber": permitNumber })
     });
 
-    return (response.ok) ? {
-      ok: true,
-      value: mapPermitDetails(await response.json())
-    } : {
-      ok: false,
-      status: response.statuscode
+    if (response.ok) {
+      const permit = await response.json();
+      return (permit.statusLabel === "Draft") ?
+        { ok: false, error: 'Draft' } :
+        { ok: true, value: mapPermitDetails(permit) }
+    } else {
+      return {
+        ok: false,
+        error: {
+          status: response.statuscode
+        }
+      }
     };
   },
 
   async lookupMany(permitNumbers) {
     const uniquePermitNumbers = [...new Set(permitNumbers)];
 
-    /** @type Array<[string, Either<string, PermitDetails>]> */
+    /** @type Array<[string, Either<PermitLookupError, PermitDetails>]> */
     const entries = await Promise.all(
       uniquePermitNumbers.map(async (pn) => [pn, await this.lookupOne(pn)])
     );
@@ -219,7 +245,9 @@ export const searchService = (authHeader, fetch) => ({
       value: mapPermitDetails(await response.json())
     } : {
       ok: false,
-      status: response.statuscode
+      error: {
+        status: response.statuscode
+      }
     };
   }
 });
