@@ -3,7 +3,6 @@ export const mapStatusLabel = (statusLabel) => ({
   "Returned - Unused": "Invalid"
 })[statusLabel] || statusLabel
 
-
 const validPermitRe = RegExp("^[0-9]{2}GB(IMP|EXP)[A-Z0-9]{6}$");
 
 export function isValidPermitNumber(permitNumber) {

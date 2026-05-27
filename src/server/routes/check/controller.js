@@ -1,12 +1,21 @@
 import Boom from '@hapi/boom'
-import { mapStatusLabel, isValidPermitNumber, isExportNotImport, formatDate } from '#/server/common/utils.js';
+import { isValidPermitNumber, isExportNotImport, formatDate } from '#/server/common/utils.js';
 
+/**
+* @param {import('../search/service').SearchServiceFactory} searchService
+*/
 export const checkController = (searchService) => ({
+  /**
+   * @param {import('@hapi/hapi').Request} request
+   * @param {import('@hapi/hapi').ResponseToolkit} h
+   */
   async handler(request, h) {
 
-    const token = request.auth.credentials.token
+    /** @type {string} */
+    const token = (/** @type (any)*/ (request.auth.credentials.token))
 
-    const permitNumber = request.query.permitNumber;
+    /** @type {string} */
+    const permitNumber = (/** @type (any)*/ (request.query.permitNumber));
 
     if (!isValidPermitNumber(permitNumber)) {
       throw Boom.badRequest("Invalid permit number");
@@ -14,18 +23,20 @@ export const checkController = (searchService) => ({
 
     const response = await searchService(token, fetch).lookupOne(permitNumber);
     if (response.ok) {
-      const result = await response.json();
+      const permit = response.value;
 
-      console.log(result);
+      console.log(permit);
 
       return h.view('check/index', {
         pageTitle: 'Check permit details',
         heading: 'Check',
         permit: {
-          ...result,
-          statusLabel: mapStatusLabel(result.statusLabel),
-          validityDate: formatDate(new Date(result.validityDate)),
-          isExportNotImport: isExportNotImport(result.permitNumber)
+          permitId: permit.permitId,
+          permitNumber: permit.permitNumber,
+          scientificName: permit.scientificName,
+          statusLabel: permit.status,
+          validityDate: formatDate(new Date(permit.validityDate)),
+          isExportNotImport: isExportNotImport(permit.permitNumber)
         }
       });
     } else {
@@ -40,7 +51,14 @@ export const checkController = (searchService) => ({
   }
 })
 
+/**
+* @param {import('../search/service').SearchServiceFactory} searchService
+*/
 export const endorseController = (searchService) => ({
+  /**
+   * @param {import('@hapi/hapi').Request} request
+   * @param {import('@hapi/hapi').ResponseToolkit} h
+   */
   async handler(request, h) {
     const token = request.auth.credentials.token
 
@@ -54,8 +72,6 @@ export const endorseController = (searchService) => ({
       //...request.payload,
       //tradeDate: new Date()
     }
-
-    console.log(`permitId: ${request.payload.permitId}`)
 
     const response = await searchService(token, fetch).endorseOne(request.payload.permitId, update);
     console.log(`PEGASUS ENDORSE RES: ${JSON.stringify(response)}`)

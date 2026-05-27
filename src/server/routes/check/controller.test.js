@@ -1,12 +1,16 @@
 import { createServer } from '#/server/server.js'
-import { statusCodes } from '#/server/common/constants/status-codes.js'
 import { describe, beforeAll, afterAll, test, expect, vi } from 'vitest'
 import { Server } from '@hapi/hapi'
 import { checkController } from './controller'
 
 describe('#checkController', () => {
   /** @type Server<import('@hapi/hapi').ServerApplicationState> */
-  let server, mockService
+  let server;
+
+  /**
+   * @type {import('../search/service').SearchServiceFactory}
+   */
+  let mockService;
 
   beforeAll(async () => {
     server = await createServer()
@@ -14,12 +18,19 @@ describe('#checkController', () => {
     mockService = (_token, _fetch) => ({
       lookupOne: async () => ({
         ok: true,
-        json: async () => ({
-          validityDate: "2026-05-10",
-          permitNumber: "25GBIMPUA93QA"
-        })
+        value: {
+          permitId: "7db9f1c1-203e-4ddc-80e7-9126116ef698",
+          permitNumber: "25GBIMPUA93QA",
+          validityDate: new Date("2026-05-31"),
+          status: "Valid",
+          scientificName: "Scientific name"
+        }
       }),
-      lookupMany: async () => ({})
+      lookupMany: async () => ({}),
+      endorseOne: async () => ({
+        ok: false,
+        status: 500
+      })
     })
 
     await server.initialize()
@@ -38,6 +49,7 @@ describe('#checkController', () => {
       query: {
         permitNumber: "25GBIMPUA93QA"
       },
+      // @ts-ignore
       auth: { credentials: { token: "TEST_TOKEN" } }
     },
       { view: mockView }
@@ -48,70 +60,13 @@ describe('#checkController', () => {
       "heading": "Check",
       "pageTitle": "Check permit details",
       "permit": {
-        "isExportNotImport": false,
+        "permitId": "7db9f1c1-203e-4ddc-80e7-9126116ef698",
         "permitNumber": "25GBIMPUA93QA",
-        "statusLabel": undefined,
-        "validityDate": "10 May 2026",
-      },
-    }
-    )
+        "statusLabel": "Valid",
+        "isExportNotImport": false,
+        "validityDate": "31 May 2026",
+        "scientificName": "Scientific name",
+      }
+    })
   })
 })
-//describe('#resultsController', () => {
-//
-//  test('invalid permit numbers displays errors', async () => {
-//    /**
-//     * @param {string} _token
-//     * @param {function} _fetch
-//     */
-//    const mockService = (_token, _fetch) => ({
-//      lookupOne: () => ({}),
-//      lookupMany: async () => ({
-//        "25GBIMPUA93QA": {
-//          ok: true,
-//          json: async () => Object.freeze({
-//            validityDate: "2026-05-10",
-//            permitNumber: "25GBIMPUA93QA"
-//          })
-//        },
-//        "26GBEXP000404": {
-//          ok: false,
-//          json: async () => Object.freeze({})
-//        }
-//      })
-//    })
-//
-//    const mockView = vi.fn()
-//
-//    const { handler } = resultsController(mockService)
-//
-//    await handler({
-//      payload: {
-//        permitReferences: `
-//          bananas
-//          25GBIMPUA93QA
-//          26GBEXP000404
-//          `
-//      },
-//      auth: { credentials: { token: "TEST_TOKEN" } }
-//    },
-//      { view: mockView }
-//    )
-//
-//    expect(mockView).calledOnceWith(
-//      'search/results', {
-//      "errors": [
-//        "26GBEXP000404",
-//        "bananas"
-//      ],
-//      "heading": "Results",
-//      "pageTitle": "Permit search results",
-//      "results": [{
-//        validityDate: "10 May 2026",
-//        permitNumber: "25GBIMPUA93QA",
-//        isExportNotImport: false,
-//        statusLabel: undefined
-//      }]
-//    }
-//    )
-//  })

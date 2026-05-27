@@ -1,22 +1,33 @@
-import { searchService } from './service.js';
-import { describe, test, expect, vi } from 'vitest';
+import { PermitStatus, searchService } from './service.js';
+import { describe, test, expect, vi, afterAll, beforeAll, assert } from 'vitest';
+
+/** @typedef {import('./service.js').SearchService} SearchService */
 
 describe('searchService', () => {
+  /** @type SearchService */
   let service
-  let mockFetch
+  let mockFetch = vi.fn();
 
   beforeAll(async () => {
-    mockFetch = vi.fn()
+    vi.useFakeTimers()
     service = searchService("TEST_AUTH_TOKEN", mockFetch)
   })
 
   afterAll(async () => {
+    vi.useRealTimers()
   })
 
   describe('endorseOne', () => {
     test('calls fetch', async () => {
-      await service.endorseOne("TEST_PERMIT_ID", {
-        deadOnArrival: 2,
+      mockFetch.mockReturnValueOnce({
+        ok: true,
+        json: async () => ({
+          validityDate: new Date("2026-05-31")
+        })
+      });
+      await service.endorseOne({
+        permitId: "TEST_PERMIT_ID",
+        numberOfAnimalsDOA: 2,
         mrnReference: "TEST_MRN_NUMBER",
         //officerEpauletteNumber: "TEST_OFFICE_EPAULETTE",
         tradeDate: new Date("2026-05-10"),
@@ -49,6 +60,12 @@ describe('searchService', () => {
 
   describe('lookupOne', () => {
     test('calls fetch', async () => {
+      mockFetch.mockReturnValueOnce({
+        ok: true,
+        json: async () => ({
+          validityDate: new Date("2026-05-31")
+        })
+      });
       await service.lookupOne("TEST_PERMIT_NUMBER")
       expect(mockFetch).toHaveBeenCalledExactlyOnceWith(
         'https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_SearchPermitByNumber', {
@@ -63,9 +80,31 @@ describe('searchService', () => {
         body: JSON.stringify({ "permitNumber": "TEST_PERMIT_NUMBER" })
       });
     })
-    //test('maps the statuses correctly', () => {
-    //  mockFetch = vi.fn(async () => ({}));
-    //});
+
+    test.each`
+      pegasusStatus           | expectedLabel             | currentDate     | expiryDate
+      ${'Issued'}             | ${PermitStatus.VALID}     | ${"2026-05-30"} | ${"2026-05-31"}
+      ${'Issued'}             | ${PermitStatus.EXPIRED}   | ${"2026-05-31"} | ${"2026-05-31"}
+      ${'Returned - Used'}    | ${PermitStatus.ENDORSED}  | ${"2026-05-30"} | ${"2026-05-31"}
+      ${'Returned - Used'}    | ${PermitStatus.ENDORSED}  | ${"2026-06-01"} | ${"2026-05-31"}
+      ${'Returned - Unused'}  | ${PermitStatus.NOT_VALID} | ${"2026-05-30"} | ${"2026-05-31"}
+    `('maps permit status $pegasusStatus to $expectedLabel when date is $currentDate and expiry is $expiryDate',
+      async ({ pegasusStatus, expectedLabel, currentDate, expiryDate }) => {
+        vi.setSystemTime(new Date(currentDate))
+        mockFetch.mockResolvedValue({
+          ok: true,
+          json: async () => ({
+            statusLabel: pegasusStatus,
+            validityDate: expiryDate
+          })
+        });
+        const result = await service.lookupOne("TEST_PERMIT_NUMBER");
+        if (result.ok) {
+          expect(result.value.status).toEqual(expectedLabel)
+        } else {
+          expect.fail("Did not return successful result")
+        }
+      });
   })
 
   describe('lookupMany', async () => {

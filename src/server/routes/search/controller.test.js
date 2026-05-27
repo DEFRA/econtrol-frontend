@@ -24,6 +24,7 @@ describe('#searchController', () => {
       auth: {
         strategy: 'azure-ad-jwt',
         credentials: {
+          // @ts-ignore
           decoded: {},
           token: ""
         }
@@ -39,24 +40,33 @@ describe('#resultsController', () => {
 
   test('invalid permit numbers displays errors', async () => {
     /**
-     * @param {string} _token
-     * @param {function} _fetch
+     * @type {import('./service').SearchServiceFactory}
      */
     const mockService = (_token, _fetch) => ({
-      lookupOne: () => ({}),
+      lookupOne: async () => ({
+        ok: false,
+        error: "Not expected to be called"
+      }),
       lookupMany: async () => ({
         "25GBIMPUA93QA": {
           ok: true,
-          json: async () => Object.freeze({
-            validityDate: "2026-05-10",
-            permitNumber: "25GBIMPUA93QA"
+          value: Object.freeze({
+            permitId: "577cde72-1db3-4a37-8333-34ae0f8ac4be",
+            validityDate: new Date("2026-05-10"),
+            permitNumber: "25GBIMPUA93QA",
+            status: "Valid",
+            scientificName: "Scientific name"
           })
         },
         "26GBEXP000404": {
           ok: false,
-          json: async () => Object.freeze({})
+          error: "Invalid"
         }
-      })
+      }),
+      endorseOne: async () => ({
+        ok: false,
+        error: "Not expected to be called"
+      }),
     })
 
     const mockView = vi.fn()
@@ -71,7 +81,11 @@ describe('#resultsController', () => {
           26GBEXP000404
           `
       },
-      auth: { credentials: { token: "TEST_TOKEN" } }
+      // @ts-ignore
+      auth: {
+        strategy: 'azure-ad-jwt',
+        credentials: { token: "TEST_TOKEN" },
+      }
     },
       { view: mockView }
     )
@@ -85,10 +99,12 @@ describe('#resultsController', () => {
       "heading": "Results",
       "pageTitle": "Permit search results",
       "results": [{
-        validityDate: "10 May 2026",
+        permitId: "577cde72-1db3-4a37-8333-34ae0f8ac4be",
         permitNumber: "25GBIMPUA93QA",
-        isExportNotImport: false,
-        statusLabel: undefined
+        statusLabel: "Valid",
+        validityDate: "10 May 2026",
+        scientificName: "Scientific name",
+        isExportNotImport: false
       }]
     }
     )

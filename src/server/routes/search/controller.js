@@ -15,13 +15,17 @@ export const searchController = {
   }
 }
 
+/**
+ * @param {import('./service').SearchServiceFactory} searchService
+ */
 export const resultsController = (searchService) => ({
   /**
    * @param {import('@hapi/hapi').Request} request
    * @param {import('@hapi/hapi').ResponseToolkit} h
    */
   async handler(request, h) {
-    const token = request.auth.credentials.token
+    /** @type {string} */
+    const token = (/** @type (any)*/ (request.auth.credentials.token))
 
     /** @type {string} */
     const payload = (/** @type (any) */ (request.payload)["permitReferences"]) || "";
@@ -35,12 +39,14 @@ export const resultsController = (searchService) => ({
     const permits = await searchService(token, fetch).lookupMany(valid);
 
     const results = await Promise.all(Object.values(permits).filter((v) => v.ok).map(async (r) => {
-      const json = await r.json();
+      const permit = r.value;
       return {
-        ...json,
-        statusLabel: mapStatusLabel(json.statusLabel),
-        validityDate: formatDate(new Date(json.validityDate)),
-        isExportNotImport: isExportNotImport(json.permitNumber)
+        permitId: permit.permitId,
+        permitNumber: permit.permitNumber,
+        scientificName: permit.scientificName,
+        statusLabel: permit.status,
+        validityDate: formatDate(new Date(permit.validityDate)),
+        isExportNotImport: isExportNotImport(permit.permitNumber)
       };
     }));
 
