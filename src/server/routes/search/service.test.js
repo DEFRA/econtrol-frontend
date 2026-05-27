@@ -63,6 +63,9 @@ describe('searchService', () => {
         body: JSON.stringify({ "permitNumber": "TEST_PERMIT_NUMBER" })
       });
     })
+    //test('maps the statuses correctly', () => {
+    //  mockFetch = vi.fn(async () => ({}));
+    //});
   })
 
   describe('lookupMany', async () => {

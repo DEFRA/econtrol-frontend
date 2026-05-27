@@ -2,6 +2,11 @@ import { isValidPermitNumber, isExportNotImport, mapStatusLabel, formatDate } fr
 import _ from 'lodash'
 
 export const searchController = {
+  /**
+   * @param {import('@hapi/hapi').Request} _request
+   * @param {import('@hapi/hapi').ResponseToolkit} h
+   * @returns {import('@hapi/hapi').ResponseObject}
+   */
   handler(_request, h) {
     return h.view('search/index', {
       pageTitle: 'Search for CITES permits',
@@ -11,15 +16,20 @@ export const searchController = {
 }
 
 export const resultsController = (searchService) => ({
+  /**
+   * @param {import('@hapi/hapi').Request} request
+   * @param {import('@hapi/hapi').ResponseToolkit} h
+   */
   async handler(request, h) {
-    // the middleware has already checked the token
     const token = request.auth.credentials.token
 
-    const payload = request.payload["permitReferences"] || "";
+    /** @type {string} */
+    const payload = (/** @type (any) */ (request.payload)["permitReferences"]) || "";
 
     const [valid, invalid] = _.partition(
-      payload.split('\n').map(s => s.trim()).filter(i => i !== ""),
-      isValidPermitNumber
+      payload.split('\n').map(s => s.trim()).filter(
+        /**@type{string}*/ i => i !== ""
+      ), isValidPermitNumber
     );
 
     const permits = await searchService(token, fetch).lookupMany(valid);

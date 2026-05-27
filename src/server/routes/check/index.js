@@ -1,4 +1,5 @@
 import { checkController, endorseController } from './controller.js'
+import { searchService } from '../search/service.js'
 
 /**
  * Sets up the routes used in the home page.
@@ -12,12 +13,12 @@ export const check = {
         {
           method: 'GET',
           path: '/check-permit-details',
-          ...checkController
+          ...checkController(searchService)
         },
         {
           method: 'POST',
           path: '/permit/{permitNumber}/endorse',
-          ...endorseController
+          ...endorseController(searchService)
         }
       ])
     }

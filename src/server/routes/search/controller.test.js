@@ -1,9 +1,11 @@
-import { describe, test, it, expect, vi } from 'vitest';
+import { describe, test, it, expect, vi, afterAll, beforeAll } from 'vitest';
 import { createServer } from '#/server/server.js'
 import { statusCodes } from '#/server/common/constants/status-codes.js'
 import { resultsController } from '#/server/routes/search/controller.js'
+import { Server } from '@hapi/hapi';
 
 describe('#searchController', () => {
+  /** @type Server<import('@hapi/hapi').ServerApplicationState> */
   let server
 
   beforeAll(async () => {
@@ -28,7 +30,7 @@ describe('#searchController', () => {
       }
     })
 
-    expect(result).toEqual(expect.stringContaining('Search for CITES permits'))
+    expect(result).toMatch('Search for CITES permits')
     expect(statusCode).toBe(statusCodes.ok)
   })
 })
@@ -36,23 +38,25 @@ describe('#searchController', () => {
 describe('#resultsController', () => {
 
   test('invalid permit numbers displays errors', async () => {
+    /**
+     * @param {string} _token
+     * @param {function} _fetch
+     */
     const mockService = (_token, _fetch) => ({
       lookupOne: () => ({}),
-      lookupMany: async () => [
-        {
+      lookupMany: async () => ({
+        "25GBIMPUA93QA": {
           ok: true,
           json: async () => Object.freeze({
             validityDate: "2026-05-10",
             permitNumber: "25GBIMPUA93QA"
           })
         },
-        {
+        "26GBEXP000404": {
           ok: false,
-          json: async () => Object.freeze({
-            permitNumber: "26GBEXP000404"
-          })
+          json: async () => Object.freeze({})
         }
-      ]
+      })
     })
 
     const mockView = vi.fn()

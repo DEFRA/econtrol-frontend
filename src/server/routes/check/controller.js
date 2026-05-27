@@ -1,8 +1,7 @@
 import Boom from '@hapi/boom'
-import { searchService } from '../search/service.js'
 import { mapStatusLabel, isValidPermitNumber, isExportNotImport, formatDate } from '#/server/common/utils.js';
 
-export const checkController = {
+export const checkController = (searchService) => ({
   async handler(request, h) {
 
     const token = request.auth.credentials.token
@@ -39,9 +38,9 @@ export const checkController = {
       }
     }
   }
-}
+})
 
-export const endorseController = {
+export const endorseController = (searchService) => ({
   async handler(request, h) {
     const token = request.auth.credentials.token
 
@@ -52,9 +51,11 @@ export const endorseController = {
     }
 
     const update = {
-      ...request.payload,
-      tradeDate: new Date()
+      //...request.payload,
+      //tradeDate: new Date()
     }
+
+    console.log(`permitId: ${request.payload.permitId}`)
 
     const response = await searchService(token, fetch).endorseOne(request.payload.permitId, update);
     console.log(`PEGASUS ENDORSE RES: ${JSON.stringify(response)}`)
@@ -66,4 +67,4 @@ export const endorseController = {
       throw Boom.boomify(error, { statusCode: response.status });
     }
   }
-}
+})
