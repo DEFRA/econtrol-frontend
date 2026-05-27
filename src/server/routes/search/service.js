@@ -1,22 +1,168 @@
+// @ts-check
+
 /**
+ * Search service factory
+ * @callback SearchServiceFactory
+ * @param {string} authHeader
+ * @param {(input: string, init?: Object) => Promise<any>} fetch
+ * @returns {SearchService}
+ */
+
+/**
+ * An instance of search service closed over API key and fetch implementation
+ * @typedef {Object} SearchService
+ * @property {(permitNumber: string) => Promise<Either<string, PermitDetails>>} lookupOne
+ * @property {(permitNumbers: Array<string>) => Promise<Record<string, Either<string, PermitDetails>>>} lookupMany
+ * @property {(endorsePermit: EndorsePermit) => Promise<Either<string, PermitDetails>>}  endorseOne
+ */
+
+/**
+* Represents a failed service operation (Left).
+* @typedef {Object} LeftFailure
+* @property {false} ok
+* @property {number} status
+*/
+
+/**
+ * Represents a successful service operation (Right).
+ * @template T
+ * @typedef {Object} RightSuccess
+ * @property {true} ok
+ * @property {T} value
+ */
+
+/**
+ * A functional Either wrapper union for clean error handling.
+ * @template E, T
+ * @typedef {LeftFailure | RightSuccess<T>} Either
+ */
+
+/**
+ * Permit details as represented by Pegasus
+ * @typedef {Object} PermitDetailsDTO
+ * @property {string} permitId "b352df39-3639-ef11-a316-000d3ad59b50"
+ * @property {string} permitNumber "24GBEXPE5Y9KC"
+ * @property {number} statuscode 149900002
+ * @property {string} statusLabel "Returned - Used"
+ * @property {string} validityDate "2025-01-03"
+ * @property {number} netMass 0,
+ * @property {number} quantity  20
+ * @property {string} citesAppendix "II"
+ * @property {string} originPermitNumber
+ * @property {string} permitType
+ * @property {string | null} commonNameOfSpecies null
+ * @property {string | null} country
+ * @property {string | null} countryOfExport null
+ * @property {string | null} countryOfImport null
+ * @property {string | null} countryOfLastReExport hull
+ * @property {string | null} countryOfReExport null
+ * @property {string | null} describeSpecimen
+ * @property {string | null} exporterAddress "1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom"
+ * @property {string | null} exporterName null,
+ * @property {string | null} gbAnnex "B"
+ * @property {string | null} importerAddress 1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom
+ * @property {string | null} importerName "Rob Wilkinson DEV"
+ * @property {string | null} purposeCode "E - Educational"
+ * @property {string | null} scientificName
+ * @property {string | null} sourceCode null
+ * @property {string | null} specialConditions null
+ */
+
+/**
+ * Permit details as represented within this service
  * @typedef {Object} PermitDetails
  * @property {string} permitId
- * @property {number} deadOnArrival
+ * @property {string} permitNumber
+ * @property {typeof PermitStatus[keyof typeof PermitStatus]} status
+ * @property {Date} validityDate
+ * @property {string | null} scientificName
+ */
+
+/**
+ * Permit endorsement as represented within this service
+ * @typedef {Object} EndorsePermit
+ * @property {string} permitId
+ * @property {number} numberOfAnimalsDOA
  * @property {string} mrnReference
  * @property {Date} tradeDate
  * @property {string} port
  */
 
 /**
-* @param {string} authHeader
-* @param {function} fetch;
+ * Permit details as represented by Pegasus Endorse API
+ * Most of the fields are optional but we will permitDetails
+ * all for completeness.
+ * @typedef {Object} EndorsePermitDTO
+ * @property {string} permitId
+ * @property {number} cites_NumberofanimalsDOA
+ * @property {string} cites_MovementReferenceNumberMRN
+ * @property {string} cites_tradedate
+ * @property {string} cites_Port
+ */
+
+export const PermitStatus = Object.freeze({
+  VALID: 'Valid',
+  EXPIRED: 'Expired',
+  ENDORSED: 'Endorsed',
+  NOT_VALID: 'Not Valid',
+  ERROR: 'Error'
+});
+
+/**
+ * @param {Date} validityDate
+ * @returns {typeof PermitStatus.VALID | typeof PermitStatus.EXPIRED}
+ */
+const validOrExpired = (validityDate) => {
+  const now = new Date();
+  return (+now < +validityDate) ? PermitStatus.VALID : PermitStatus.EXPIRED;
+}
+
+/**
+ * @param {string} statusLabel
+ * @param {Date} validityDate
+ * @returns {typeof PermitStatus[keyof typeof PermitStatus]}
+ */
+const mapStatus = (statusLabel, validityDate) => {
+  let status;
+  switch (statusLabel) {
+    case "Draft":
+      status = PermitStatus.ERROR
+      break;
+    case "Issued":
+      status = validOrExpired(validityDate)
+      break;
+    case "Returned - Used":
+      status = PermitStatus.ENDORSED
+      break;
+    case "Returned - Unused":
+      status = PermitStatus.NOT_VALID
+      break;
+    default:
+      status = PermitStatus.ERROR;
+      break;
+  }
+  return status;
+}
+
+/**
+ * @param {PermitDetailsDTO} permitDetails
+ * @returns {PermitDetails}
+ */
+const mapPermitDetails = (permitDetails) => {
+  const validityDate = new Date(permitDetails.validityDate)
+  return {
+    ...permitDetails,
+    validityDate,
+    status: mapStatus(permitDetails.statusLabel, validityDate)
+  }
+}
+
+/**
+* @type {SearchServiceFactory}
 */
 export const searchService = (authHeader, fetch) => ({
-  /**
-  * @param {string} permitNumber
-  */
   async lookupOne(permitNumber) {
-    return fetch('https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_SearchPermitByNumber', {
+    const response = await fetch('https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_SearchPermitByNumber', {
       method: 'POST',
       headers: {
         "Authorization": `Bearer ${authHeader}`,
@@ -27,26 +173,29 @@ export const searchService = (authHeader, fetch) => ({
       },
       body: JSON.stringify({ "permitNumber": permitNumber })
     });
+
+    return (response.ok) ? {
+      ok: true,
+      value: mapPermitDetails(await response.json())
+    } : {
+      ok: false,
+      status: response.statuscode
+    };
   },
 
-  /**
-  * @param {Array<string>} permitNumbers
-  * @returns {Promise<Object<string, PermitDetails>>}
-  */
   async lookupMany(permitNumbers) {
     const uniquePermitNumbers = [...new Set(permitNumbers)];
+
+    /** @type Array<[string, Either<string, PermitDetails>]> */
     const entries = await Promise.all(
       uniquePermitNumbers.map(async (pn) => [pn, await this.lookupOne(pn)])
     );
+
     return Object.fromEntries(entries);
   },
 
-  /**
-  * @param {string} permitId
-  * @param {PermitDetails} permitDetails
-  */
-  async endorseOne(permitId, permitDetails) {
-    return fetch('https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_EndorsePermit', {
+  async endorseOne(endorsement) {
+    const response = await fetch('https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_EndorsePermit', {
       method: 'POST',
       headers: {
         "Authorization": `Bearer ${authHeader}`,
@@ -56,13 +205,21 @@ export const searchService = (authHeader, fetch) => ({
         "OData-Version": "4.0"
       },
       body: JSON.stringify({
-        "permitId": permitId,
-        "cites_NumberofanimalsDOA": permitDetails.deadOnArrival,
-        "cites_MovementReferenceNumberMRN": permitDetails.mrnReference,
-        "cites_tradedate": permitDetails.tradeDate.toISOString().split('T')[0],
+        "permitId": endorsement.permitId,
+        "cites_NumberofanimalsDOA": endorsement.numberOfAnimalsDOA,
+        "cites_MovementReferenceNumberMRN": endorsement.mrnReference,
+        "cites_tradedate": endorsement.tradeDate.toISOString().split('T')[0],
+        "cites_Port": endorsement.port
         //"cites_CustomsOfficerEpauletteNumber": "TEST_OFFICE_EPAULETTE",
-        "cites_Port": permitDetails.port
       })
     })
+
+    return (response.ok) ? {
+      ok: true,
+      value: mapPermitDetails(await response.json())
+    } : {
+      ok: false,
+      status: response.statuscode
+    };
   }
 });
