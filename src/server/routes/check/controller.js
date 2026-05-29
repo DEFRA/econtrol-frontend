@@ -1,5 +1,6 @@
 import Boom from '@hapi/boom'
 import { isValidPermitNumber, isExportNotImport, formatDate } from '#/server/common/utils.js';
+import { Unit } from '../search/service.js';
 
 /**
 * @param {import('../search/service').SearchServiceFactory} searchService
@@ -22,6 +23,7 @@ export const checkController = (searchService) => ({
     }
 
     const response = await searchService(token, fetch).lookupOne(permitNumber);
+
     if (response.ok) {
       const permit = response.value;
 
@@ -40,8 +42,11 @@ export const checkController = (searchService) => ({
         }
       });
     } else {
+      if (response.error === "Draft") {
+        throw Boom.boomify(new Error("Draft"), { statusCode: 404 });
+      }
       console.log(request)
-      switch (response.status) {
+      switch (response.error.status) {
         case 401: {
           console.log("401 received from Pegasus")
           //return h.redirect("/auth/login")
@@ -60,27 +65,33 @@ export const endorseController = (searchService) => ({
    * @param {import('@hapi/hapi').ResponseToolkit} h
    */
   async handler(request, h) {
-    const token = request.auth.credentials.token
+    /** @type {string} */
+    const token = (/** @type (any)*/ (request.auth.credentials.token))
 
-    const permitNumber = request.params.permitNumber;
+    /** @type {string} */
+    const permitNumber = (/** @type (any)*/ (request.params.permitNumber));
+
+    /** @type {import('../search/service').EndorsePermit} */
+    const payload = (/** @type (any)*/ (request.payload));
 
     if (!isValidPermitNumber(permitNumber)) {
       throw Boom.badRequest("Invalid permit number");
     }
 
-    const update = {
-      //...request.payload,
+    const endorsement = {
+      ...payload,
+      cites_unitreturned: Unit.quantity
       //tradeDate: new Date()
     }
 
-    const response = await searchService(token, fetch).endorseOne(request.payload.permitId, update);
+    const response = await searchService(token, fetch).endorseOne(endorsement);
     console.log(`PEGASUS ENDORSE RES: ${JSON.stringify(response)}`)
 
     if (response.ok) {
-      return h.redirect(`/permit/${permitNumber}/check`);
+      return h.redirect(`/check-permit-details?permitNumber=${permitNumber}`);
     } else {
       var error = new Error('Unexpected error');
-      throw Boom.boomify(error, { statusCode: response.status });
+      throw Boom.boomify(error, { statusCode: response.error.status });
     }
   }
 })
