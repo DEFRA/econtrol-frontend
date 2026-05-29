@@ -97,15 +97,22 @@ import Ajv from "ajv";
  * @property {typeof PermitStatus[keyof typeof PermitStatus]} status
  * @property {Date} validityDate
  * @property {string | null} scientificName
+ * @property {string | null} commonName null
+ * @property {string | null} exporterName null,
+ * @property {string | null} exporterAddress "1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom"
+ * @property {string | null} importerName "Rob Wilkinson DEV"
+ * @property {string | null} importerAddress 1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom
+ * @property {string} citesAppendix "II"
+ * @property {string | null} gbAnnex "B"
  */
 
 /**
  * Permit endorsement as represented within this service
  * @typedef {Object} EndorsePermit
  * @property {string} permitId
+ * @property {number} actualQuantity
  * @property {number} numberOfAnimalsDOA
  * @property {string} mrnReference
- * @property {Date} tradeDate
  * @property {string} port
  */
 
@@ -132,23 +139,40 @@ export const Unit = Object.freeze({
   m: 149900005,
   m2: 149900006,
   m3: 149900007,
-  quantity: 149900009,
   tonne: 149900010
 })
+
+export const QUANTITY = 149900009
 
 /**
  * Permit details as represented by Pegasus Endorse API
  * Most of the fields are optional but we will permitDetails
  * all for completeness.
  * @typedef {Object} EndorsePermitDTO
- * @property {string}                         permitId
- * @property {number|undefined}               cites_quantityreturned
- * @property {number|undefined}               cites_netmassreturned
+ * @property {string}                                     permitId
+ * @property {typeof Unit[keyof typeof Unit] | QUANTITY}  cites_unitreturned
+ * @property {number=}                                    cites_quantityreturned
+ * @property {number=}                                    cites_netmassreturned
+ * @property {number=}                                    cites_NumberofanimalsDOA
+ * @property {string=}                                    cites_MovementReferenceNumberMRN
+ * @property {string=}                                    cites_tradedate
+ * @property {string=}                                    cites_Port
+ */
+
+/**
+ * @typedef {Object} QuantityDTO
+ * @property {number}    cites_quantityreturned
+ * @property {QUANTITY}  cites_unitreturned
+ */
+
+/**
+ * @typedef {Object} NetMassDTO
+ * @property {number}                         cites_netmassreturned
  * @property {typeof Unit[keyof typeof Unit]} cites_unitreturned
- * @property {number|undefined}               cites_NumberofanimalsDOA
- * @property {string|undefined}               cites_MovementReferenceNumberMRN
- * @property {string|undefined}               cites_tradedate
- * @property {string|undefined}               cites_Port
+ *
+
+/**
+ * @typedef {QuantityDTO | NetMassDTO} QuantityOrNetMassDTO
  */
 
 export const PermitStatus = Object.freeze({
@@ -204,6 +228,7 @@ const mapPermitDetails = (permitDetails) => {
   return {
     ...permitDetails,
     validityDate,
+    commonName: permitDetails.commonNameOfSpecies,
     status: mapStatus(permitDetails.statusLabel, validityDate)
   }
 }
@@ -227,6 +252,7 @@ export const searchService = (authHeader, fetch) => ({
 
     if (response.ok) {
       const permit = await response.json();
+      console.log(`PERMIT: ${JSON.stringify(permit)}`)
       return (permit.statusLabel === "Draft") ?
         { ok: false, error: 'Draft' } :
         { ok: true, value: mapPermitDetails(permit) }
@@ -252,12 +278,10 @@ export const searchService = (authHeader, fetch) => ({
   },
 
   async endorseOne(endorsement) {
-    /** @type {EndorsePermitDTO} */
+    /** @type {EndorsePermitDTO | QuantityOrNetMassDTO} */
     const dto = {
       "permitId": endorsement.permitId,
-      "cites_unitreturned": Unit.quantity,
-      "cites_quantityreturned": undefined,
-      "cites_netmassreturned": undefined,
+      "cites_unitreturned": QUANTITY,
       "cites_NumberofanimalsDOA": endorsement.numberOfAnimalsDOA,
       "cites_MovementReferenceNumberMRN": endorsement.mrnReference,
       "cites_tradedate": new Date().toISOString().split('T')[0],

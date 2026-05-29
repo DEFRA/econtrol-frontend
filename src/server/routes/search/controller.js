@@ -59,11 +59,13 @@ export const resultsController = (searchService) => ({
       return {
         permitId: permit.permitId,
         permitNumber: permit.permitNumber,
-        scientificName: permit.scientificName,
+        isExportNotImport: isExportNotImport(permit.permitNumber),
+        validityDate: formatDate(new Date(permit.validityDate)),
         statusLabel: permit.status,
         statusLabelColour: statusLabelColour(permit.status),
-        validityDate: formatDate(new Date(permit.validityDate)),
-        isExportNotImport: isExportNotImport(permit.permitNumber)
+        scientificName: permit.scientificName,
+        citesAppendix: permit.citesAppendix,
+        gbAnnex: permit.gbAnnex
       };
     }));
 

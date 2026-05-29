@@ -36,9 +36,16 @@ export const checkController = (searchService) => ({
           permitId: permit.permitId,
           permitNumber: permit.permitNumber,
           scientificName: permit.scientificName,
+          commonName: permit.commonName,
           statusLabel: permit.status,
           validityDate: formatDate(new Date(permit.validityDate)),
-          isExportNotImport: isExportNotImport(permit.permitNumber)
+          isExportNotImport: isExportNotImport(permit.permitNumber),
+          exporterName: permit.exporterName,
+          exporterAddress: permit.exporterAddress,
+          importerName: permit.importerName,
+          importerAddress: permit.importerAddress,
+          citesAppendix: permit.citesAppendix,
+          gbAnnex: permit.gbAnnex
         }
       });
     } else {

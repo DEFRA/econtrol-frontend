@@ -30,18 +30,19 @@
           </dd>
         </div>
       </dl>
+      {% if permit.exporterName or permit.exporterAddress %}
       <h2 class="govuk-heading-s">Exporter/Re-exporter</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Name and address</dt>
           <dd class="govuk-summary-list__value">
-            Serpentis Logistik GmbH
-            <br>
-            Gewerbepark Süd 14a
-            <br>
-            DE-64546 Mörfelden-Walldorf
-            <br>
-            Germany
+          {% if permit.exporterName %}
+          {{permit.exporterName}}
+          {% endif %}
+          <br>
+          {% if permit.exporterAddress %}
+          {{permit.exporterAddress}}
+          {% endif %}
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -51,20 +52,20 @@
           </dd>
         </div>
       </dl>
+      {% endif %}
+      {% if permit.importerName or permit.importerAddress %}
       <h2 class="govuk-heading-s">Importer</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Name and address</dt>
           <dd class="govuk-summary-list__value">
-            UK Exotic Reptile Imports Ltd
+            {% if permit.importerName %}
+            {{permit.importerName}}
+            {% endif %}
             <br>
-            Unit 7, Riverside Business Park
-            <br>
-            Essex
-            <br>
-            IG11 0HZ
-            <br>
-            United Kingdom
+            {% if permit.importerAddress %}
+            {{permit.importerAddress}}
+            {% endif %}
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -74,20 +75,25 @@
           </dd>
         </div>
       </dl>
+      {% endif %}
       <h2 class="govuk-heading-s">Specimen details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
+        {% if permit.scientificName %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Scientific name of species</dt>
           <dd class="govuk-summary-list__value">
-            Python bivittatus
+            {{permit.scientificName}}
           </dd>
         </div>
+        {% endif %}
+        {% if permit.commonName %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Common name of species</dt>
           <dd class="govuk-summary-list__value">
-            Burmese python
+            {{permit.commonName}}
           </dd>
         </div>
+        {% endif %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Description of specimens</dt>
           <dd class="govuk-summary-list__value">
@@ -98,18 +104,22 @@
             Microchip number 12345678912345
           </dd>
         </div>
+        {% if permit.citesAppendix %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">CITES Appendix</dt>
           <dd class="govuk-summary-list__value">
-            II
+            {{permit.citesAppendix}}
           </dd>
         </div>
+        {% endif %}
+        {% if permit.gbAnnex %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">GB Annex</dt>
           <dd class="govuk-summary-list__value">
-            B
+            {{ permit.gbAnnex }}
           </dd>
         </div>
+        {% endif %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Source</dt>
           <dd class="govuk-summary-list__value">
