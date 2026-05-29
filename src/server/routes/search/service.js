@@ -1,4 +1,5 @@
 // @ts-check
+import Ajv from "ajv";
 
 /**
  * Search service factory
@@ -108,16 +109,46 @@
  * @property {string} port
  */
 
+/**@type import("ajv").Schema */
+const schema = {
+  type: "object",
+  properties: {
+    permtiId: { type: "string" },
+    cites_NumberofanimalsDOA: { type: "number" },
+    cites_MovementReferenceNumberMRN: { type: "string" },
+    cites_tradedate: { type: "string" },
+    cites_Port: { type: "string" },
+  },
+  required: ["permitId"],
+  additionalProperties: false
+}
+
+export const Unit = Object.freeze({
+  g: 149900000,
+  kg: 149900001,
+  l: 149900002,
+  cm3: 149900003,
+  ml: 149900004,
+  m: 149900005,
+  m2: 149900006,
+  m3: 149900007,
+  quantity: 149900009,
+  tonne: 149900010
+})
+
 /**
  * Permit details as represented by Pegasus Endorse API
  * Most of the fields are optional but we will permitDetails
  * all for completeness.
  * @typedef {Object} EndorsePermitDTO
- * @property {string} permitId
- * @property {number} cites_NumberofanimalsDOA
- * @property {string} cites_MovementReferenceNumberMRN
- * @property {string} cites_tradedate
- * @property {string} cites_Port
+ * @property {string}                         permitId
+ * @property {number|undefined}               cites_quantityreturned
+ * @property {number|undefined}               cites_netmassreturned
+ * @property {typeof Unit[keyof typeof Unit]} cites_unitreturned
+ * @property {number|undefined}               cites_NumberofanimalsDOA
+ * @property {string|undefined}               cites_MovementReferenceNumberMRN
+ * @property {string|undefined}               cites_tradedate
+ * @property {string|undefined}               cites_Port
  */
 
 export const PermitStatus = Object.freeze({
@@ -221,6 +252,17 @@ export const searchService = (authHeader, fetch) => ({
   },
 
   async endorseOne(endorsement) {
+    /** @type {EndorsePermitDTO} */
+    const dto = {
+      "permitId": endorsement.permitId,
+      "cites_unitreturned": Unit.quantity,
+      "cites_quantityreturned": undefined,
+      "cites_netmassreturned": undefined,
+      "cites_NumberofanimalsDOA": endorsement.numberOfAnimalsDOA,
+      "cites_MovementReferenceNumberMRN": endorsement.mrnReference,
+      "cites_tradedate": new Date().toISOString().split('T')[0],
+      "cites_Port": endorsement.port
+    }
     const response = await fetch('https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_EndorsePermit', {
       method: 'POST',
       headers: {
@@ -230,14 +272,7 @@ export const searchService = (authHeader, fetch) => ({
         "OData-MaxVersion": "4.0",
         "OData-Version": "4.0"
       },
-      body: JSON.stringify({
-        "permitId": endorsement.permitId,
-        "cites_NumberofanimalsDOA": endorsement.numberOfAnimalsDOA,
-        "cites_MovementReferenceNumberMRN": endorsement.mrnReference,
-        "cites_tradedate": endorsement.tradeDate.toISOString().split('T')[0],
-        "cites_Port": endorsement.port
-        //"cites_CustomsOfficerEpauletteNumber": "TEST_OFFICE_EPAULETTE",
-      })
+      body: JSON.stringify(dto)
     })
 
     return (response.ok) ? {
@@ -246,7 +281,8 @@ export const searchService = (authHeader, fetch) => ({
     } : {
       ok: false,
       error: {
-        status: response.statuscode
+        status: response.status,
+        message: response.statusText
       }
     };
   }

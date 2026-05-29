@@ -19,6 +19,7 @@ describe('searchService', () => {
 
   describe('endorseOne', () => {
     test('calls fetch', async () => {
+      vi.setSystemTime(new Date("2026-05-10"))
       mockFetch.mockReturnValueOnce({
         ok: true,
         json: async () => ({
@@ -47,7 +48,7 @@ describe('searchService', () => {
           "permitId": "TEST_PERMIT_ID",
           //"cites_quantityreturned": 10.5,
           //"cites_netmassreturned": 25.2,
-          //"cites_unitreturned": 149900001,
+          "cites_unitreturned": 149900009,
           "cites_NumberofanimalsDOA": 2,
           "cites_MovementReferenceNumberMRN": "TEST_MRN_NUMBER",
           "cites_tradedate": "2026-05-10",
