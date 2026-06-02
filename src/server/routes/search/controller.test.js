@@ -40,12 +40,14 @@ describe('#resultsController', () => {
 
   test('invalid permit numbers displays errors', async () => {
     /**
-     * @type {import('./service').SearchServiceFactory}
+     * @type {import('./service').SearchService}
      */
-    const mockService = (_token, _fetch) => ({
+    const mockService = ({
       lookupOne: async () => ({
         ok: false,
-        error: "Not expected to be called"
+        error: {
+          status: 500
+        }
       }),
       lookupMany: async () => ({
         "25GBIMPUA93QA": {
@@ -55,17 +57,28 @@ describe('#resultsController', () => {
             validityDate: new Date("2026-05-10"),
             permitNumber: "25GBIMPUA93QA",
             status: "Valid",
-            scientificName: "Scientific name"
+            scientificName: "Scientific name",
+            citesAppendix: "II",
+            commonName: null,
+            exporterName: null,
+            exporterAddress: null,
+            importerName: null,
+            importerAddress: null,
+            gbAnnex: null,
           })
         },
         "26GBEXP000404": {
           ok: false,
-          error: "Invalid"
+          error: {
+            status: 500
+          }
         }
       }),
       endorseOne: async () => ({
         ok: false,
-        error: "Not expected to be called"
+        error: {
+          status: 500
+        }
       }),
     })
 
@@ -105,7 +118,9 @@ describe('#resultsController', () => {
         statusLabelColour: "blue",
         validityDate: "10 May 2026",
         scientificName: "Scientific name",
-        isExportNotImport: false
+        isExportNotImport: false,
+        citesAppendix: "II",
+        gbAnnex: null,
       }]
     }
     )

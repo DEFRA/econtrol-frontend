@@ -1,5 +1,8 @@
 import { checkController, endorseController } from './controller.js'
 import { searchService } from '../search/service.js'
+import { config } from '#/config/config.js'
+
+const service = searchService(config.get("pegasusBaseUrl"), fetch);
 
 /**
  * Sets up the routes used in the home page.
@@ -13,12 +16,12 @@ export const check = {
         {
           method: 'GET',
           path: '/check-permit-details',
-          ...checkController(searchService)
+          ...checkController(service)
         },
         {
           method: 'POST',
           path: '/permit/{permitNumber}/endorse',
-          ...endorseController(searchService)
+          ...endorseController(service)
         }
       ])
     }

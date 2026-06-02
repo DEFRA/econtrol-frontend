@@ -3,7 +3,7 @@ import { isValidPermitNumber, isExportNotImport, formatDate } from '#/server/com
 import { Unit } from '../search/service.js';
 
 /**
-* @param {import('../search/service').SearchServiceFactory} searchService
+* @param {import('../search/service').SearchService} searchService
 */
 export const checkController = (searchService) => ({
   /**
@@ -22,7 +22,7 @@ export const checkController = (searchService) => ({
       throw Boom.badRequest("Invalid permit number");
     }
 
-    const response = await searchService(token, fetch).lookupOne(permitNumber);
+    const response = await searchService.lookupOne(token, permitNumber);
 
     if (response.ok) {
       const permit = response.value;
@@ -64,7 +64,7 @@ export const checkController = (searchService) => ({
 })
 
 /**
-* @param {import('../search/service').SearchServiceFactory} searchService
+* @param {import('../search/service').SearchService} searchService
 */
 export const endorseController = (searchService) => ({
   /**
@@ -91,7 +91,7 @@ export const endorseController = (searchService) => ({
       //tradeDate: new Date()
     }
 
-    const response = await searchService(token, fetch).endorseOne(endorsement);
+    const response = await searchService.endorseOne(token, endorsement);
     console.log(`PEGASUS ENDORSE RES: ${JSON.stringify(response)}`)
 
     if (response.ok) {
