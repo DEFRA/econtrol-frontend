@@ -10,7 +10,7 @@ describe('searchService', () => {
 
   beforeAll(async () => {
     vi.useFakeTimers()
-    service = searchService("TEST_AUTH_TOKEN", mockFetch)
+    service = searchService("https://baseurl.example.com", mockFetch)
   })
 
   afterAll(async () => {
@@ -26,7 +26,7 @@ describe('searchService', () => {
           validityDate: new Date("2026-05-31")
         })
       });
-      await service.endorseOne({
+      await service.endorseOne("TEST_AUTH_TOKEN", {
         permitId: "TEST_PERMIT_ID",
         numberOfAnimalsDOA: 2,
         mrnReference: "TEST_MRN_NUMBER",
@@ -35,7 +35,7 @@ describe('searchService', () => {
         port: "TEST_PORT"
       })
       expect(mockFetch).toHaveBeenCalledExactlyOnceWith(
-        'https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_EndorsePermit', {
+        "https://baseurl.example.com/api/data/v9.2/cites_EndorsePermit", {
         method: 'POST',
         headers: {
           "Authorization": "Bearer TEST_AUTH_TOKEN",
@@ -67,9 +67,9 @@ describe('searchService', () => {
           validityDate: new Date("2026-05-31")
         })
       });
-      await service.lookupOne("TEST_PERMIT_NUMBER")
+      await service.lookupOne("TEST_AUTH_TOKEN", "TEST_PERMIT_NUMBER")
       expect(mockFetch).toHaveBeenCalledExactlyOnceWith(
-        'https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_SearchPermitByNumber', {
+        "https://baseurl.example.com/api/data/v9.2/cites_SearchPermitByNumber", {
         method: 'POST',
         headers: {
           "Authorization": "Bearer TEST_AUTH_TOKEN",
@@ -99,7 +99,7 @@ describe('searchService', () => {
             validityDate: expiryDate
           })
         });
-        const result = await service.lookupOne("TEST_PERMIT_NUMBER");
+        const result = await service.lookupOne("TEST_AUTH_TOKEN", "TEST_PERMIT_NUMBER");
         if (result.ok) {
           expect(result.value.status).toEqual(expectedLabel)
         } else {
@@ -114,7 +114,7 @@ describe('searchService', () => {
           statusLabel: "Draft"
         })
       });
-      const result = await service.lookupOne("TEST_PERMIT_NUMBER");
+      const result = await service.lookupOne("TEST_AUTH_TOKEN", "TEST_PERMIT_NUMBER");
       if (!result.ok) {
         expect(result.error).toEqual("Draft");
       } else {
@@ -132,10 +132,10 @@ describe('searchService', () => {
           statusLabel: "Issued"
         })
       });
-      await service.lookupMany(["TEST1", "TEST2", "TEST1"])
+      await service.lookupMany("TEST_AUTH_TOKEN", ["TEST1", "TEST2", "TEST1"])
       expect(mockFetch).toHaveBeenCalledTimes(2)
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_SearchPermitByNumber', {
+        'https://baseurl.example.com/api/data/v9.2/cites_SearchPermitByNumber', {
         method: 'POST',
         headers: {
           "Authorization": "Bearer TEST_AUTH_TOKEN",
@@ -147,7 +147,7 @@ describe('searchService', () => {
         body: JSON.stringify({ "permitNumber": "TEST2" })
       });
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_SearchPermitByNumber', {
+        'https://baseurl.example.com/api/data/v9.2/cites_SearchPermitByNumber', {
         method: 'POST',
         headers: {
           "Authorization": "Bearer TEST_AUTH_TOKEN",

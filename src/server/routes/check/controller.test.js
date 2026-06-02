@@ -8,14 +8,14 @@ describe('#checkController', () => {
   let server;
 
   /**
-   * @type {import('../search/service').SearchServiceFactory}
+   * @type {import('../search/service').SearchService}
    */
   let mockService;
 
   beforeAll(async () => {
     server = await createServer()
 
-    mockService = (_token, _fetch) => ({
+    mockService = ({
       lookupOne: async () => ({
         ok: true,
         value: {
@@ -23,13 +23,22 @@ describe('#checkController', () => {
           permitNumber: "25GBIMPUA93QA",
           validityDate: new Date("2026-05-31"),
           status: "Valid",
-          scientificName: "Scientific name"
+          scientificName: "Scientific name",
+          citesAppendix: "II",
+          commonName: null,
+          exporterName: null,
+          exporterAddress: null,
+          importerName: null,
+          importerAddress: null,
+          gbAnnex: null,
         }
       }),
       lookupMany: async () => ({}),
       endorseOne: async () => ({
         ok: false,
-        status: 500
+        error: {
+          status: 500
+        }
       })
     })
 
@@ -66,6 +75,13 @@ describe('#checkController', () => {
         "isExportNotImport": false,
         "validityDate": "31 May 2026",
         "scientificName": "Scientific name",
+        "citesAppendix": "II",
+        "commonName": null,
+        "exporterName": null,
+        "exporterAddress": null,
+        "importerName": null,
+        "importerAddress": null,
+        "gbAnnex": null,
       }
     })
   })

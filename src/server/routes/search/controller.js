@@ -17,7 +17,7 @@ export const searchController = {
 }
 
 /**
- * @param {import('./service').SearchServiceFactory} searchService
+ * @param {import('./service').SearchService} searchService
  */
 export const resultsController = (searchService) => ({
   /**
@@ -37,7 +37,7 @@ export const resultsController = (searchService) => ({
       ), isValidPermitNumber
     );
 
-    const permits = await searchService(token, fetch).lookupMany(valid);
+    const permits = await searchService.lookupMany(token, valid);
 
     /**
      * @param {typeof PermitStatus[keyof typeof PermitStatus]} statusLabel

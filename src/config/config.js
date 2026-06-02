@@ -217,7 +217,17 @@ export const config = convict({
       default: 'x-cdp-request-id',
       env: 'TRACING_HEADER'
     }
-  }, oauth: {
+  },
+  pegasusBaseUrl: {
+    doc: 'Pegasus/Dynamics 365 Base URL',
+    format: String,
+    default: ({
+      local: "https://org99791a21.api.crm11.dynamics.com",
+      dev: "https://org99791a21.api.crm11.dynamics.com",
+      test: "https://orgfadb71c1.api.crm11.dynamics.com"
+    }[environment]) || "https://org99791a21.api.crm11.dynamics.com"
+  },
+  oauth: {
     clientId: {
       doc: 'OAuth2 client ID',
       format: String,
@@ -225,7 +235,7 @@ export const config = convict({
         local: "5b05b115-fdd0-466e-a44a-b122e210057f",
         dev: "5b05b115-fdd0-466e-a44a-b122e210057f",
         test: "a850de38-df79-478e-a0a5-631d7451c7c7"
-      }[environment])
+      }[environment]) || "5b05b115-fdd0-466e-a44a-b122e210057f"
     },
     redirectUri: {
       doc: 'OAuth2 redirect URI',
@@ -234,7 +244,7 @@ export const config = convict({
         local: "http://localhost/",
         dev: "https://econtrol-frontend.dev.cdp-int.defra.cloud/auth/callback",
         test: "https://econtrol-frontend.test.cdp-int.defra.cloud/auth/callback",
-      }[environment])
+      }[environment]) || "https://econtrol-frontend.dev.cdp-int.defra.cloud/auth/callback"
     }
   }
 })

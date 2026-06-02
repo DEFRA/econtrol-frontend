@@ -4,7 +4,7 @@ import Ajv from "ajv";
 /**
  * Search service factory
  * @callback SearchServiceFactory
- * @param {string} authHeader
+ * @param {string} baseURL
  * @param {(input: string, init?: Object) => Promise<any>} fetch
  * @returns {SearchService}
  */
@@ -30,9 +30,9 @@ import Ajv from "ajv";
 /**
  * An instance of search service closed over API key and fetch implementation
  * @typedef {Object} SearchService
- * @property {(permitNumber: string) => Promise<Either<PermitLookupError, PermitDetails>>} lookupOne
- * @property {(permitNumbers: Array<string>) => Promise<Record<string, Either<PermitLookupError, PermitDetails>>>} lookupMany
- * @property {(endorsePermit: EndorsePermit) => Promise<Either<HttpError, PermitDetails>>}  endorseOne
+ * @property {(authHeader: string, permitNumber: string) => Promise<Either<PermitLookupError, PermitDetails>>} lookupOne
+ * @property {(authHeader: string, permitNumbers: Array<string>) => Promise<Record<string, Either<PermitLookupError, PermitDetails>>>} lookupMany
+ * @property {(authHeader: string, endorsePermit: EndorsePermit) => Promise<Either<HttpError, PermitDetails>>}  endorseOne
  */
 
 /**
@@ -236,9 +236,9 @@ const mapPermitDetails = (permitDetails) => {
 /**
 * @type {SearchServiceFactory}
 */
-export const searchService = (authHeader, fetch) => ({
-  async lookupOne(permitNumber) {
-    const response = await fetch('https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_SearchPermitByNumber', {
+export const searchService = (baseURL, fetch) => ({
+  async lookupOne(authHeader, permitNumber) {
+    const response = await fetch(`${baseURL}/api/data/v9.2/cites_SearchPermitByNumber`, {
       method: 'POST',
       headers: {
         "Authorization": `Bearer ${authHeader}`,
@@ -266,18 +266,18 @@ export const searchService = (authHeader, fetch) => ({
     };
   },
 
-  async lookupMany(permitNumbers) {
+  async lookupMany(authHeader, permitNumbers) {
     const uniquePermitNumbers = [...new Set(permitNumbers)];
 
     /** @type Array<[string, Either<PermitLookupError, PermitDetails>]> */
     const entries = await Promise.all(
-      uniquePermitNumbers.map(async (pn) => [pn, await this.lookupOne(pn)])
+      uniquePermitNumbers.map(async (pn) => [pn, await this.lookupOne(authHeader, pn)])
     );
 
     return Object.fromEntries(entries);
   },
 
-  async endorseOne(endorsement) {
+  async endorseOne(authHeader, endorsement) {
     /** @type {EndorsePermitDTO | QuantityOrNetMassDTO} */
     const dto = {
       "permitId": endorsement.permitId,
@@ -287,7 +287,7 @@ export const searchService = (authHeader, fetch) => ({
       "cites_tradedate": new Date().toISOString().split('T')[0],
       "cites_Port": endorsement.port
     }
-    const response = await fetch('https://org99791a21.api.crm11.dynamics.com/api/data/v9.2/cites_EndorsePermit', {
+    const response = await fetch(`${baseURL}/api/data/v9.2/cites_EndorsePermit`, {
       method: 'POST',
       headers: {
         "Authorization": `Bearer ${authHeader}`,
