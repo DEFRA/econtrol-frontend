@@ -222,7 +222,7 @@ export const config = convict({
     doc: 'Pegasus/Dynamics 365 Base URL',
     format: String,
     default: ({
-      local: "https://org99791a21.api.crm11.dynamics.com",
+      local: "https://orgfadb71c1.api.crm11.dynamics.com",
       dev: "https://org99791a21.api.crm11.dynamics.com",
       test: "https://orgfadb71c1.api.crm11.dynamics.com"
     }[environment]) || "https://org99791a21.api.crm11.dynamics.com"
@@ -232,7 +232,7 @@ export const config = convict({
       doc: 'OAuth2 client ID',
       format: String,
       default: ({
-        local: "5b05b115-fdd0-466e-a44a-b122e210057f",
+        local: "a850de38-df79-478e-a0a5-631d7451c7c7",
         dev: "5b05b115-fdd0-466e-a44a-b122e210057f",
         test: "a850de38-df79-478e-a0a5-631d7451c7c7"
       }[environment]) || "5b05b115-fdd0-466e-a44a-b122e210057f"
