@@ -1,6 +1,6 @@
 import { isValidPermitNumber, isExportNotImport, formatDate } from '#/server/common/utils.js'
 import _ from 'lodash'
-import { PermitStatus } from './service.js'
+import { PermitStatus, Unit } from './service.js'
 
 export const searchController = {
   /**
@@ -13,6 +13,18 @@ export const searchController = {
       pageTitle: 'Search for CITES permits',
       heading: 'Search'
     })
+  }
+}
+
+/** @param {import('./service.js').Quantity | import('./service.js').NetMass} amount
+ *  @return string
+ */
+const amountToText = (amount) => {
+  if ('unit' in amount) {
+    const unitText = Object.entries(Unit).find(([_, v]) => v === amount.unit);
+    return `${amount.mass}${unitText ? unitText[0] : ""}`
+  } else {
+    return amount.quantity.toString()
   }
 }
 
@@ -65,7 +77,8 @@ export const resultsController = (searchService) => ({
         statusLabelColour: statusLabelColour(permit.status),
         scientificName: permit.scientificName,
         citesAppendix: permit.citesAppendix,
-        gbAnnex: permit.gbAnnex
+        gbAnnex: permit.gbAnnex,
+        quantity: amountToText(permit.amount)
       };
     }));
 

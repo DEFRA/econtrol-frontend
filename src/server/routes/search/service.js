@@ -89,6 +89,16 @@ import Ajv from "ajv";
  * @property {string | null} specialConditions null
  */
 
+/** @typedef {Object} Quantity
+ *  @property {number} quantity
+ */
+
+/** @typedef {Object} NetMass
+ *  @property {number} mass
+ *  @property {typeof Unit[keyof typeof Unit]} unit
+ */
+
+
 /**
  * Permit details as represented within this service
  * @typedef {Object} PermitDetails
@@ -104,6 +114,7 @@ import Ajv from "ajv";
  * @property {string | null} importerAddress 1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom
  * @property {string} citesAppendix "II"
  * @property {string | null} gbAnnex "B"
+ * @property {Quantity | NetMass} amount
  */
 
 /**
@@ -113,6 +124,7 @@ import Ajv from "ajv";
  * @property {number} actualQuantity
  * @property {number} numberOfAnimalsDOA
  * @property {string} mrnReference
+ * @property {string} customersOfficerId
  * @property {string} port
  */
 
@@ -150,12 +162,10 @@ export const QUANTITY = 149900009
  * all for completeness.
  * @typedef {Object} EndorsePermitDTO
  * @property {string}                                     permitId
- * @property {typeof Unit[keyof typeof Unit] | QUANTITY}  cites_unitreturned
- * @property {number=}                                    cites_quantityreturned
- * @property {number=}                                    cites_netmassreturned
  * @property {number=}                                    cites_NumberofanimalsDOA
  * @property {string=}                                    cites_MovementReferenceNumberMRN
  * @property {string=}                                    cites_tradedate
+ * @property {string=}                                    cites_CustomsOfficerEpauletteNumber
  * @property {string=}                                    cites_Port
  */
 
@@ -225,11 +235,18 @@ const mapStatus = (statusLabel, validityDate) => {
  */
 const mapPermitDetails = (permitDetails) => {
   const validityDate = new Date(permitDetails.validityDate)
+  let amount;
+  if (permitDetails.quantity) {
+    amount = { quantity: permitDetails.quantity }
+  } else {
+    amount = { mass: permitDetails.netMass, unit: Unit.kg }
+  }
   return {
     ...permitDetails,
     validityDate,
     commonName: permitDetails.commonNameOfSpecies,
-    status: mapStatus(permitDetails.statusLabel, validityDate)
+    status: mapStatus(permitDetails.statusLabel, validityDate),
+    amount
   }
 }
 
@@ -285,7 +302,8 @@ export const searchService = (baseURL, fetch) => ({
       "cites_NumberofanimalsDOA": endorsement.numberOfAnimalsDOA,
       "cites_MovementReferenceNumberMRN": endorsement.mrnReference,
       "cites_tradedate": new Date().toISOString().split('T')[0],
-      "cites_Port": endorsement.port
+      "cites_CustomsOfficerEpauletteNumber": endorsement.customersOfficerId,
+      "cites_Port": endorsement.port,
     }
     const response = await fetch(`${baseURL}/api/data/v9.2/cites_EndorsePermit`, {
       method: 'POST',

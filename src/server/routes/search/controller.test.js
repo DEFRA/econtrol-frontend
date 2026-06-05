@@ -3,6 +3,7 @@ import { createServer } from '#/server/server.js'
 import { statusCodes } from '#/server/common/constants/status-codes.js'
 import { resultsController } from '#/server/routes/search/controller.js'
 import { Server } from '@hapi/hapi';
+import { Unit } from './service';
 
 describe('#searchController', () => {
   /** @type Server<import('@hapi/hapi').ServerApplicationState> */
@@ -65,6 +66,7 @@ describe('#resultsController', () => {
             importerName: null,
             importerAddress: null,
             gbAnnex: null,
+            amount: { mass: 1, unit: Unit.kg }
           })
         },
         "26GBEXP000404": {
@@ -121,6 +123,7 @@ describe('#resultsController', () => {
         isExportNotImport: false,
         citesAppendix: "II",
         gbAnnex: null,
+        quantity: "1kg"
       }]
     }
     )

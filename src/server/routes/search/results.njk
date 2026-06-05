@@ -54,7 +54,7 @@
           <td class="govuk-table__cell">{{ result.permitNumber }}</td>
           <td class="govuk-table__cell">{{ "Export" if result.isExportNotImport else "Import"}}</td>
           <td class="govuk-table__cell">{{ result.scientificName }}</td>
-          <td class="govuk-table__cell">?</td>
+          <td class="govuk-table__cell">{{ result.quantity }}</td>
           <td class="govuk-table__cell">{{ result.validityDate }}</td>
           <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--{{ result.statusLabelColour }}">{{ result.statusLabel }}</strong></td>
           <td class="govuk-table__cell"><a href="/check-permit-details?permitNumber={{ result.permitNumber }}" class="govuk-link">Check permit</a></td>
