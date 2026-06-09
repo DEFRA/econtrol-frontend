@@ -52,12 +52,19 @@ describe('#checkController', () => {
 
   test('Should provide expected response', async () => {
     const mockView = vi.fn()
+    const stateGet = vi.fn()
+    const stateSet = vi.fn()
 
     const { handler } = checkController(mockService)
 
     await handler({
       query: {
         permitNumber: "25GBIMPUA93QA"
+      },
+      // @ts-ignore
+      yar: {
+        get: stateGet,
+        set: stateSet
       },
       // @ts-ignore
       auth: { credentials: { token: "TEST_TOKEN" } }
@@ -69,6 +76,7 @@ describe('#checkController', () => {
       'check/index', {
       "heading": "Check",
       "pageTitle": "Check permit details",
+      "nav": null,
       "permit": {
         "permitId": "7db9f1c1-203e-4ddc-80e7-9126116ef698",
         "permitNumber": "25GBIMPUA93QA",

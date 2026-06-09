@@ -128,6 +128,8 @@ describe('#resultsController', () => {
       }),
     })
 
+    const stateGet = vi.fn()
+    const stateSet = vi.fn()
     const mockView = vi.fn()
 
     const { handler } = resultsController(mockService)
@@ -139,6 +141,11 @@ describe('#resultsController', () => {
           25GBIMPUA93QA
           26GBEXP000404
           `
+      },
+      // @ts-ignore
+      yar: {
+        get: stateGet,
+        set: stateSet
       },
       // @ts-ignore
       auth: {

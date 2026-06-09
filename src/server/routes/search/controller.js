@@ -81,6 +81,7 @@ export const resultsController = (searchService) => ({
       })
     }
 
+
     const permits = await searchService.lookupMany(token, valid);
 
     const results = await Promise.all(Object.values(permits).filter((v) => v.ok).map(async (r) => {
@@ -101,11 +102,13 @@ export const resultsController = (searchService) => ({
 
     const errors = [...Object.entries(permits).filter(([_, v]) => !v.ok).map(([k, _]) => k), ...invalid];
 
+    request.yar.set('permit_results', results.map(r => r.permitNumber));
+
     return h.view('search/results', {
       pageTitle: 'Permit search results',
       heading: 'Results',
       results,
       errors,
-    });
+    })
   }
 })

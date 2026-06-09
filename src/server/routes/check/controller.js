@@ -41,11 +41,25 @@ export const checkController = (searchService) => ({
     if (response.ok) {
       const permit = response.value;
 
-      console.log(permit);
+      let nav = null;
+      const permitSet = request.yar.get("permit_results");
+
+      if (Array.isArray(permitSet) && permitSet.length > 0) {
+        const idx = permitSet.indexOf(permitNumber);
+        if (idx !== -1) {
+          nav = {
+            curr: idx + 1,
+            last: permitSet.length,
+            prev: idx > 0 ? permitSet[idx - 1] : null,
+            next: idx < permitSet.length - 1 ? permitSet[idx + 1] : null
+          }
+        }
+      }
 
       return h.view('check/index', {
         pageTitle: 'Check permit details',
         heading: 'Check',
+        nav,
         permit: {
           permitId: permit.permitId,
           permitNumber: permit.permitNumber,
