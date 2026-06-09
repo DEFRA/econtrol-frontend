@@ -25,7 +25,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Check permit details</h1>
-      <h2 class="govuk-heading-s">Permit overview</h2>
+      <h2 class="govuk-heading-m">Permit overview</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Permit number</dt>
@@ -53,43 +53,56 @@
         </div>
       </dl>
       {% if permit.exporterName or permit.exporterAddress %}
-      <h2 class="govuk-heading-s">Exporter/Re-exporter</h2>
+      <h2 class="govuk-heading-m">Exporter</h2>
+      {% endif %}
       <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
+        {% if permit.exporterName %}
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Name and address</dt>
+          <dt class="govuk-summary-list__key">Name</dt>
           <dd class="govuk-summary-list__value">
-          {% if permit.exporterName %}
           {{permit.exporterName}}
-          {% endif %}
-          <br>
-          {% if permit.exporterAddress %}
-          {{permit.exporterAddress}}
-          {% endif %}
           </dd>
         </div>
+        {% endif %}
+        {% if permit.exporterAddress %}
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Country of re-export</dt>
+          <dt class="govuk-summary-list__key">Address</dt>
+          <dd class="govuk-summary-list__value">
+            <address>
+            {{permit.exporterAddress}}
+            </address>
+          </dd>
+        </div>
+        {% endif %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Country of export</dt>
           <dd class="govuk-summary-list__value">
             Germany
           </dd>
         </div>
       </dl>
-      {% endif %}
       {% if permit.importerName or permit.importerAddress %}
-      <h2 class="govuk-heading-s">Importer</h2>
+      <h2 class="govuk-heading-m">Importer</h2>
+      {% endif %}
       <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
+        {% if permit.importerName %}
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Name and address</dt>
+          <dt class="govuk-summary-list__key">Name</dt>
           <dd class="govuk-summary-list__value">
-            {% if permit.importerName %}
             {{permit.importerName}}
-            {% endif %}
-            <br>
-            {% if permit.importerAddress %}
-            {{permit.importerAddress}}
-            {% endif %}
           </dd>
         </div>
+        {% endif %}
+        {% if permit.importerAddress %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Address</dt>
+          <dd class="govuk-summary-list__value">
+            <address>
+            {{permit.importerAddress}}
+            </address>
+          </dd>
+        </div>
+        {% endif %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Country of import</dt>
           <dd class="govuk-summary-list__value">
@@ -97,8 +110,28 @@
           </dd>
         </div>
       </dl>
-      {% endif %}
-      <h2 class="govuk-heading-s">Specimen details</h2>
+      <h2 class="govuk-heading-m">Origin history</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Country of origin</dt>
+          <dd class="govuk-summary-list__value">
+            Vietnam
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Date of issue</dt>
+          <dd class="govuk-summary-list__value">
+            31 July 2018
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Permit number</dt>
+          <dd class="govuk-summary-list__value">
+            18VN39735/CT-KL
+          </dd>
+        </div>
+      </dl>
+      <h2 class="govuk-heading-m">Specimen details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         {% if permit.scientificName %}
         <div class="govuk-summary-list__row">
@@ -154,62 +187,22 @@
             T: Commercial trade
           </dd>
         </div>
+        {% if permit.quantity %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Quantity</dt>
           <dd class="govuk-summary-list__value">
-            1
+            {{ permit.quantity }}
           </dd>
         </div>
+        {% endif %}
+        {% if permit.netMass %}
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Net mass (KG)</dt>
+          <dt class="govuk-summary-list__key">Net mass</dt>
           <dd class="govuk-summary-list__value">
+          {{ permit.netMass }}
           </dd>
         </div>
-      </dl>
-      <h2 class="govuk-heading-s">Re-export history</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Country of last re-export</dt>
-          <dd class="govuk-summary-list__value">
-            Germany
-          </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Date of issue</dt>
-          <dd class="govuk-summary-list__value">
-            20 Mar 2026
-          </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Certificate number</dt>
-          <dd class="govuk-summary-list__value">
-            DE-W 00045/01
-          </dd>
-        </div>
-      </dl>
-      <h2 class="govuk-heading-s">Origin history</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Country of origin</dt>
-          <dd class="govuk-summary-list__value">
-            Vietnam
-          </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Date of issue</dt>
-          <dd class="govuk-summary-list__value">
-            31 July 2018
-          </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Permit number</dt>
-          <dd class="govuk-summary-list__value">
-            18VN39735/CT-KL
-          </dd>
-        </div>
-      </dl>
-      <h2 class="govuk-heading-s">Remarks and conditions</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
+        {% endif %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Special conditions</dt>
           <dd class="govuk-summary-list__value">
@@ -218,6 +211,9 @@
             </p>
           </dd>
         </div>
+      </dl>
+      <h2 class="govuk-heading-m">Authorisation and issuing details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Management Authority</dt>
           <dd class="govuk-summary-list__value">
@@ -246,7 +242,7 @@
       <div id="endorsement-section">
         <form method="post" action="/permit/{{ permit.permitNumber }}/endorse" autocomplete="off">
           <input type="hidden" name="permitId" value="{{ permit.permitId }}">
-          <h2 class="govuk-heading-s govuk-!-margin-top-8">Enter endorsement details</h2>
+          <h2 class="govuk-heading-m govuk-!-margin-top-8">Enter endorsement details</h2>
           <p class="govuk-body govuk-!-margin-bottom-4">Permit quantity: 1</p>
           <div class="govuk-form-group">
             <label class="govuk-label" for="actualQuantity">Actual imported quantity</label>

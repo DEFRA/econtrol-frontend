@@ -31,6 +31,7 @@ describe('#checkController', () => {
           importerName: null,
           importerAddress: null,
           gbAnnex: null,
+          amount: { quantity: 1 }
         }
       }),
       lookupMany: async () => ({}),
@@ -78,10 +79,11 @@ describe('#checkController', () => {
         "citesAppendix": "II",
         "commonName": null,
         "exporterName": null,
-        "exporterAddress": null,
+        "exporterAddress": undefined,
         "importerName": null,
-        "importerAddress": null,
+        "importerAddress": undefined,
         "gbAnnex": null,
+        "quantity": 1
       }
     })
   })
