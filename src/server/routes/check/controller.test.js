@@ -73,6 +73,7 @@ describe('#checkController', () => {
         "permitId": "7db9f1c1-203e-4ddc-80e7-9126116ef698",
         "permitNumber": "25GBIMPUA93QA",
         "statusLabel": "Valid",
+        "statusLabelColour": "blue",
         "isExportNotImport": false,
         "validityDate": "31 May 2026",
         "scientificName": "Scientific name",

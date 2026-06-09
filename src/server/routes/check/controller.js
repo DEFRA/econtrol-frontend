@@ -1,6 +1,7 @@
 import Boom from '@hapi/boom'
 import { isValidPermitNumber, isExportNotImport, formatDate } from '#/server/common/utils.js';
 import { Unit } from '../search/service.js';
+import { statusLabelColour } from '../search/controller.js';
 
 /**
 * @param {import('../search/service').SearchService} searchService
@@ -38,6 +39,7 @@ export const checkController = (searchService) => ({
           scientificName: permit.scientificName,
           commonName: permit.commonName,
           statusLabel: permit.status,
+          statusLabelColour: statusLabelColour(permit.status),
           validityDate: formatDate(new Date(permit.validityDate)),
           isExportNotImport: isExportNotImport(permit.permitNumber),
           exporterName: permit.exporterName,

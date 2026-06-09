@@ -48,7 +48,7 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Status</dt>
           <dd class="govuk-summary-list__value">
-            <strong class="govuk-tag govuk-tag--blue">{{ permit.statusLabel }}</strong>
+            <strong class="govuk-tag govuk-tag--{{ permit.statusLabelColour }}">{{ permit.statusLabel }}</strong>
           </dd>
         </div>
       </dl>
@@ -197,7 +197,7 @@
         {% endif %}
         {% if permit.netMass %}
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Net mass</dt>
+          <dt class="govuk-summary-list__key">Net mass </dt>
           <dd class="govuk-summary-list__value">
           {{ permit.netMass }}
           </dd>

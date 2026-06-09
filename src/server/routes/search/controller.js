@@ -29,6 +29,22 @@ const amountToText = (amount) => {
 }
 
 /**
+ * @param {typeof PermitStatus[keyof typeof PermitStatus]} statusLabel
+ * @returns {'red' | 'green' | 'blue'}
+ */
+export const statusLabelColour = (statusLabel) => {
+  switch (statusLabel) {
+    case "Valid":
+      return "blue"
+    case "Endorsed":
+      return "green"
+    default:
+      return "red"
+  }
+}
+
+
+/**
  * @param {import('./service').SearchService} searchService
  */
 export const resultsController = (searchService) => ({
@@ -50,21 +66,6 @@ export const resultsController = (searchService) => ({
     );
 
     const permits = await searchService.lookupMany(token, valid);
-
-    /**
-     * @param {typeof PermitStatus[keyof typeof PermitStatus]} statusLabel
-     * @returns {'red' | 'green' | 'blue'}
-     */
-    const statusLabelColour = (statusLabel) => {
-      switch (statusLabel) {
-        case "Valid":
-          return "blue"
-        case "Endorsed":
-          return "green"
-        default:
-          return "red"
-      }
-    }
 
     const results = await Promise.all(Object.values(permits).filter((v) => v.ok).map(async (r) => {
       const permit = r.value;
