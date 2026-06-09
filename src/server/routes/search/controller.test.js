@@ -38,6 +38,50 @@ describe('#searchController', () => {
 })
 
 describe('#resultsController', () => {
+  test('no valid permit numbers returns error', async () => {
+    /**
+     * @type {import('./service').SearchService}
+     */
+    const mockService = ({
+      lookupOne: async () => ({
+        ok: false,
+        error: {
+          status: 500
+        }
+      }),
+      lookupMany: async () => ({}),
+      endorseOne: async () => ({
+        ok: false,
+        error: {
+          status: 500
+        }
+      }),
+    })
+
+    const mockView = vi.fn()
+
+    const { handler } = resultsController(mockService)
+
+    await handler({
+      payload: {
+        permitReferences: "foo\nbar"
+      },
+      // @ts-ignore
+      auth: {
+        strategy: 'azure-ad-jwt',
+        credentials: { token: "TEST_TOKEN" },
+      }
+    },
+      { view: mockView }
+    )
+
+    expect(mockView).calledOnceWith(
+      'search/index', {
+      pageTitle: 'Search for CITES permits',
+      heading: 'Search',
+      error: true
+    });
+  });
 
   test('invalid permit numbers displays errors', async () => {
     /**

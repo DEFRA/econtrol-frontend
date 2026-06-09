@@ -65,6 +65,14 @@ export const resultsController = (searchService) => ({
       ), isValidPermitNumber
     );
 
+    if (valid.length === 0) {
+      return h.view('search/index', {
+        pageTitle: 'Search for CITES permits',
+        heading: 'Search',
+        error: true
+      })
+    }
+
     const permits = await searchService.lookupMany(token, valid);
 
     const results = await Promise.all(Object.values(permits).filter((v) => v.ok).map(async (r) => {

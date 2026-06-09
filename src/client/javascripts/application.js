@@ -16,11 +16,12 @@ createAll(Radios)
 createAll(SkipLink)
 
 
-const textarea = /** @type {HTMLTextAreaElement | null} */(document.getElementById('permitReferences'))
+const textarea = /** @type {HTMLTextAreaElement | null} */(document.getElementById("permitReferences"))
 const countEl = document.getElementById("permitCount")
 
 function countPermits() {
-  const value = textarea?.value || ''
+  if (!textarea) return 0;
+  const value = textarea.value
   const permitRefs = value.split(/[\n,]+/).map(function (r) { return r.replace(/\./g, '').trim().toUpperCase() }).filter(Boolean)
   return new Set(permitRefs).size
 }
@@ -33,7 +34,7 @@ function updateCount() {
 
 if (textarea != null) {
   textarea.addEventListener('input', updateCount)
-  textarea.addEventListener('paste', function (e) {
+  textarea.addEventListener('paste', (e) => {
     e.preventDefault()
     const pastedText = (e?.clipboardData?.getData("text") || "")
     const refs = pastedText.split(/[\s,]+/).map((r) => r.trim()).filter(Boolean)
