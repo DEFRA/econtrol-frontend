@@ -78,9 +78,9 @@ describe('#checkController', () => {
         "citesAppendix": "II",
         "commonName": null,
         "exporterName": null,
-        "exporterAddress": null,
+        "exporterAddress": undefined,
         "importerName": null,
-        "importerAddress": null,
+        "importerAddress": undefined,
         "gbAnnex": null,
       }
     })

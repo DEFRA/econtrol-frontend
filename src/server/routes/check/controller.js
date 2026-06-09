@@ -41,9 +41,9 @@ export const checkController = (searchService) => ({
           validityDate: formatDate(new Date(permit.validityDate)),
           isExportNotImport: isExportNotImport(permit.permitNumber),
           exporterName: permit.exporterName,
-          exporterAddress: permit.exporterAddress,
+          exporterAddress: permit.exporterAddress?.split(',').map(s => s.trim()).join('\n'),
           importerName: permit.importerName,
-          importerAddress: permit.importerAddress,
+          importerAddress: permit.importerAddress?.replace(",", "\n"),
           citesAppendix: permit.citesAppendix,
           gbAnnex: permit.gbAnnex
         }
