@@ -76,6 +76,7 @@ export const checkController = (searchService) => ({
           importerName: permit.importerName,
           importerAddress: permit.importerAddress?.replace(",", "\n"),
           citesAppendix: permit.citesAppendix,
+          countryOfOrigin: permit.countryOfOrigin,
           gbAnnex: permit.gbAnnex,
           amount: {
             ...permit.amount,

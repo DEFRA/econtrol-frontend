@@ -23,7 +23,8 @@ describe('searchService', () => {
       mockFetch.mockReturnValueOnce({
         ok: true,
         json: async () => ({
-          validityDate: new Date("2026-05-31")
+          validityDate: new Date("2026-05-31"),
+          country: "Germany"
         })
       });
       await service.endorseOne("TEST_AUTH_TOKEN", {
@@ -64,7 +65,8 @@ describe('searchService', () => {
       mockFetch.mockReturnValueOnce({
         ok: true,
         json: async () => ({
-          validityDate: new Date("2026-05-31")
+          validityDate: new Date("2026-05-31"),
+          country: "Germany"
         })
       });
       await service.lookupOne("TEST_AUTH_TOKEN", "TEST_PERMIT_NUMBER")
@@ -96,7 +98,8 @@ describe('searchService', () => {
           ok: true,
           json: async () => ({
             statusLabel: pegasusStatus,
-            validityDate: expiryDate
+            validityDate: expiryDate,
+            country: "Germany"
           })
         });
         const result = await service.lookupOne("TEST_AUTH_TOKEN", "TEST_PERMIT_NUMBER");
@@ -129,7 +132,8 @@ describe('searchService', () => {
       mockFetch.mockResolvedValue({
         ok: true,
         json: async () => ({
-          statusLabel: "Issued"
+          statusLabel: "Issued",
+          country: "Germany"
         })
       });
       await service.lookupMany("TEST_AUTH_TOKEN", ["TEST1", "TEST2", "TEST1"])

@@ -72,7 +72,7 @@ import Ajv from "ajv";
  * @property {string} originPermitNumber
  * @property {string} permitType
  * @property {string | null} commonNameOfSpecies null
- * @property {string | null} country
+ * @property {string} country
  * @property {string | null} countryOfExport null
  * @property {string | null} countryOfImport null
  * @property {string | null} countryOfLastReExport hull
@@ -112,6 +112,7 @@ import Ajv from "ajv";
  * @property {string | null} exporterAddress "1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom"
  * @property {string | null} importerName "Rob Wilkinson DEV"
  * @property {string | null} importerAddress 1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom
+ * @property {string} countryOfOrigin
  * @property {string} citesAppendix "II"
  * @property {string | null} gbAnnex "B"
  * @property {Quantity | NetMass} amount
@@ -234,6 +235,9 @@ const mapStatus = (statusLabel, validityDate) => {
  * @returns {PermitDetails}
  */
 const mapPermitDetails = (permitDetails) => {
+  if (permitDetails.country == null) {
+    throw new Error("Pegasus returned no country of origin but it is mandatory")
+  }
   const validityDate = new Date(permitDetails.validityDate)
   let amount;
   if (permitDetails.quantity) {
@@ -246,7 +250,8 @@ const mapPermitDetails = (permitDetails) => {
     validityDate,
     commonName: permitDetails.commonNameOfSpecies,
     status: mapStatus(permitDetails.statusLabel, validityDate),
-    amount
+    amount,
+    countryOfOrigin: permitDetails.country
   }
 }
 
