@@ -1,4 +1,4 @@
-import { checkController, endorseController } from './controller.js'
+import { checkController, endorseController, setMrnController } from './controller.js'
 import { searchService } from '../search/service.js'
 import { config } from '#/config/config.js'
 
@@ -17,6 +17,11 @@ export const check = {
           method: 'GET',
           path: '/check-permit-details',
           ...checkController(service)
+        },
+        {
+          method: 'POST',
+          path: '/set-mrn',
+          ...setMrnController()
         },
         {
           method: 'POST',

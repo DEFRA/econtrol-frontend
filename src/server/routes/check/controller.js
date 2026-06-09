@@ -56,6 +56,8 @@ export const checkController = (searchService) => ({
         }
       }
 
+      const mrn = request.yar.get("mrn") || "";
+
       return h.view('check/index', {
         pageTitle: 'Check permit details',
         heading: 'Check',
@@ -80,6 +82,7 @@ export const checkController = (searchService) => ({
             unitText: ('unit' in permit.amount) ? unitToText(permit.amount.unit) : undefined,
             unitTextLong: ('unit' in permit.amount) ? unitToTextLong[unitToText(permit.amount.unit)] : undefined,
           },
+          mrn
         }
       });
     } else {
@@ -94,6 +97,22 @@ export const checkController = (searchService) => ({
         }
       }
     }
+  }
+})
+
+export const setMrnController = () => ({
+  /**
+   * @param {import('@hapi/hapi').Request} request
+   * @param {import('@hapi/hapi').ResponseToolkit} h
+   */
+  async handler(request, h) {
+    /** @type {Object} */
+    const { mrn } = (/** @type (any)*/ (request.payload));
+
+    console.log(`MRN: ${mrn}`)
+    request.yar.set("mrn", mrn);
+
+    return h.response('OK').code(200);
   }
 })
 

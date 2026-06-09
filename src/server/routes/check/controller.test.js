@@ -96,7 +96,8 @@ describe('#checkController', () => {
           "quantity": 1,
           "unitText": undefined,
           "unitTextLong": undefined
-        }
+        },
+        "mrn": ""
       }
     })
   })

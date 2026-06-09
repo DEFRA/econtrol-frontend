@@ -18,6 +18,7 @@ createAll(SkipLink)
 
 const textarea = /** @type {HTMLTextAreaElement | null} */(document.getElementById("permitReferences"))
 const countEl = document.getElementById("permitCount")
+const applyMrnRefEl = document.getElementById("applyReferenceLink");
 
 function countPermits() {
   if (!textarea) return 0;
@@ -30,6 +31,29 @@ function updateCount() {
   if (!countEl) return
   const n = countPermits()
   countEl.textContent = n > 0 ? `You have entered ${n} permit number${(n === 1 ? "" : "s")}.` : "";
+}
+
+if (applyMrnRefEl != null) {
+  applyMrnRefEl.addEventListener('click', (e) => {
+    e.preventDefault();
+    const mrnInputEl = document.getElementById("mrnReference");
+    const applyHintEl = document.getElementById("mrnReference-apply-hint");
+    if (mrnInputEl && applyHintEl) {
+      fetch('/set-mrn', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ mrn: mrnInputEl.value ? mrnInputEl.value.trim() : "" })
+      }).then(r => {
+        if (r.ok) {
+          applyHintEl.textContent = "Applied to all permits";
+        } else {
+          applyHintEl.textContent = "Applying MRN to all permits failed"
+        }
+      });
+    }
+  })
 }
 
 if (textarea != null) {
