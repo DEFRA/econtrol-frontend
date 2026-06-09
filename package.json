@@ -27,7 +27,8 @@
     "server:debug": "nodemon --inspect-brk=0.0.0.0 --ext js,json --legacy-watch --watch ./src/server --watch ./src/config --env-file-if-exists=.env ./src",
     "prestart": "npm run build:frontend",
     "start": "NODE_ENV=production node .",
-    "setup:husky": "node -e \"try { (await import('husky')).default() } catch (e) { if (e.code !== 'ERR_MODULE_NOT_FOUND') throw e }\" --input-type module"
+    "setup:husky": "node -e \"try { (await import('husky')).default() } catch (e) { if (e.code !== 'ERR_MODULE_NOT_FOUND') throw e }\" --input-type module",
+    "typecheck": "tsc"
   },
   "imports": {
     "#/*": "./src/*",
@@ -75,6 +76,10 @@
   "devDependencies": {
     "@babel/preset-env": "7.29.2",
     "@defra/hapi-connect": "1.0.1",
+    "@types/connect": "3.4.38",
+    "@types/convict": "6.1.6",
+    "@types/lodash": "4.17.24",
+    "@types/nunjucks": "3.2.6",
     "@vitest/coverage-v8": "4.1.4",
     "cheerio": "1.2.0",
     "eslint": "9.39.2",
