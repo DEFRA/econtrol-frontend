@@ -169,7 +169,6 @@ describe('#resultsController', () => {
         gbAnnex: null,
         quantity: "1kg"
       }]
-    }
-    )
+    })
   })
 })

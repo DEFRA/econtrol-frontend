@@ -28,10 +28,10 @@ describe('searchService', () => {
       });
       await service.endorseOne("TEST_AUTH_TOKEN", {
         permitId: "TEST_PERMIT_ID",
+        actualQuantity: 1,
         numberOfAnimalsDOA: 2,
         mrnReference: "TEST_MRN_NUMBER",
-        //officerEpauletteNumber: "TEST_OFFICE_EPAULETTE",
-        tradeDate: new Date("2026-05-10"),
+        customersOfficerId: "TEST_OFFICER_ID",
         port: "TEST_PORT"
       })
       expect(mockFetch).toHaveBeenCalledExactlyOnceWith(
@@ -46,13 +46,13 @@ describe('searchService', () => {
         },
         body: JSON.stringify({
           "permitId": "TEST_PERMIT_ID",
-          //"cites_quantityreturned": 10.5,
+          "cites_quantityreturned": 1,
           //"cites_netmassreturned": 25.2,
           "cites_unitreturned": 149900009,
           "cites_NumberofanimalsDOA": 2,
           "cites_MovementReferenceNumberMRN": "TEST_MRN_NUMBER",
           "cites_tradedate": "2026-05-10",
-          //"cites_CustomsOfficerEpauletteNumber": "TEST_OFFICE_EPAULETTE",
+          "cites_CustomsOfficerEpauletteNumber": "TEST_OFFICER_ID",
           "cites_Port": "TEST_PORT"
         })
       });
