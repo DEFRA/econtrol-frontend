@@ -6,7 +6,7 @@
 
     <h1 class="govuk-heading-l">Permit search results</h1>
 
-{% if errors | length > 0 %}
+{% if errors | length > 0 or results | length == 0 %}
     <div class="govuk-!-margin-bottom-6">
       <div class="govuk-notification-banner govuk-!-margin-top-0 permit-notification-banner--error" role="alert" aria-labelledby="govuk-notification-banner-title-permit-not-found" data-module="govuk-notification-banner" data-govuk-notification-banner-init="">
         <div class="govuk-notification-banner__header">
