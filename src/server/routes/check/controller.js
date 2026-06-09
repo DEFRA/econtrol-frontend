@@ -1,7 +1,20 @@
 import Boom from '@hapi/boom'
 import { isValidPermitNumber, isExportNotImport, formatDate } from '#/server/common/utils.js';
-import { Unit } from '../search/service.js';
-import { statusLabelColour } from '../search/controller.js';
+import { QUANTITY, Unit } from '../search/service.js';
+import { statusLabelColour, unitToText } from '../search/controller.js';
+
+/** @type {Record<keyof typeof Unit, string>} */
+const unitToTextLong = Object.freeze({
+  g: "grams",
+  kg: "kilograms",
+  l: "liters",
+  cm3: "cubic centimeters",
+  ml: "millilitres",
+  m: "meters",
+  m2: "square meters",
+  m3: "cubic meters",
+  tonne: "tonnes"
+})
 
 /**
 * @param {import('../search/service').SearchService} searchService
@@ -48,8 +61,11 @@ export const checkController = (searchService) => ({
           importerAddress: permit.importerAddress?.replace(",", "\n"),
           citesAppendix: permit.citesAppendix,
           gbAnnex: permit.gbAnnex,
-          quantity: !('unit' in permit.amount) ? permit.amount.quantity : undefined,
-          netMass: ('unit' in permit.amount) ? permit.amount.mass : undefined
+          amount: {
+            ...permit.amount,
+            unitText: ('unit' in permit.amount) ? unitToText(permit.amount.unit) : undefined,
+            unitTextLong: ('unit' in permit.amount) ? unitToTextLong[unitToText(permit.amount.unit)] : undefined,
+          },
         }
       });
     } else {
@@ -91,7 +107,7 @@ export const endorseController = (searchService) => ({
 
     const endorsement = {
       ...payload,
-      cites_unitreturned: Unit.quantity
+      cites_unitreturned: QUANTITY
       //tradeDate: new Date()
     }
 

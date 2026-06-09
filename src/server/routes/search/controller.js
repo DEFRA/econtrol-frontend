@@ -16,13 +16,21 @@ export const searchController = {
   }
 }
 
+/** @param {import('./service.js').Unit} unit
+ *  @return string
+ */
+export const unitToText = (unit) => {
+  const entry = Object.entries(Unit).find(([_, v]) => v === unit);
+  return entry ? entry[0] : "";
+}
+
 /** @param {import('./service.js').Quantity | import('./service.js').NetMass} amount
  *  @return string
  */
 const amountToText = (amount) => {
   if ('unit' in amount) {
-    const unitText = Object.entries(Unit).find(([_, v]) => v === amount.unit);
-    return `${amount.mass}${unitText ? unitText[0] : ""}`
+    const unitText = unitToText(amount.unit);
+    return `${amount.mass}${unitText}`
   } else {
     return amount.quantity.toString()
   }

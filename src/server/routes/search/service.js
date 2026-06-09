@@ -298,6 +298,7 @@ export const searchService = (baseURL, fetch) => ({
     /** @type {EndorsePermitDTO | QuantityOrNetMassDTO} */
     const dto = {
       "permitId": endorsement.permitId,
+      "cites_quantityreturned": endorsement.actualQuantity,
       "cites_unitreturned": QUANTITY,
       "cites_NumberofanimalsDOA": endorsement.numberOfAnimalsDOA,
       "cites_MovementReferenceNumberMRN": endorsement.mrnReference,

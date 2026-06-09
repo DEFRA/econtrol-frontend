@@ -84,7 +84,11 @@ describe('#checkController', () => {
         "importerName": null,
         "importerAddress": undefined,
         "gbAnnex": null,
-        "quantity": 1
+        "amount": {
+          "quantity": 1,
+          "unitText": undefined,
+          "unitTextLong": undefined
+        }
       }
     })
   })

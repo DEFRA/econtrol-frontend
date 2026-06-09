@@ -187,7 +187,7 @@
             T: Commercial trade
           </dd>
         </div>
-        {% if permit.quantity %}
+        {% if permit.amount.quantity %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Quantity</dt>
           <dd class="govuk-summary-list__value">
@@ -195,11 +195,11 @@
           </dd>
         </div>
         {% endif %}
-        {% if permit.netMass %}
+        {% if permit.amount.unit %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Net mass </dt>
           <dd class="govuk-summary-list__value">
-          {{ permit.netMass }}
+          {{ permit.amount.mass }}{{ permit.amount.unitText }}
           </dd>
         </div>
         {% endif %}
@@ -243,15 +243,19 @@
         <form method="post" action="/permit/{{ permit.permitNumber }}/endorse" autocomplete="off">
           <input type="hidden" name="permitId" value="{{ permit.permitId }}">
           <h2 class="govuk-heading-m govuk-!-margin-top-8">Enter endorsement details</h2>
-          <p class="govuk-body govuk-!-margin-bottom-4">Permit quantity: 1</p>
+          {# <p class="govuk-body govuk-!-margin-bottom-4">Permit quantity: 1</p>--> #}
           <div class="govuk-form-group">
-            <label class="govuk-label" for="actualQuantity">Actual imported quantity</label>
-            <input class="govuk-input govuk-input--width-5"
-                   id="actualQuantity"
-                   name="actualQuantity"
-                   type="text"
-                   inputmode="numeric"
-                   value="">
+            <label class="govuk-label" for="actualQuantity">{{"Ex" if permit.isExportNotImport else "Im"}}ported net mass, in {{permit.amount.unitTextLong}}</label>
+            <div class="govuk-input__wrapper">
+              <input class="govuk-input govuk-input--width-5"
+                    id="actualQuantity"
+                    name="actualQuantity"
+                    type="text"
+                    inputmode="numeric"
+                    value="">
+
+              <div class="govuk-input__suffix" aria-hidden="true">{{ permit.amount.unitText }}</div>
+            </div>
           </div>
           <div class="govuk-form-group">
             <label class="govuk-label" for="deadOnArrival">Number of animals dead on arrival</label>
@@ -292,8 +296,6 @@
                     class="govuk-button"
                     data-module="govuk-button"
                     data-govuk-button-init="">Endorse permit</button>
-            <a href="/permit/{{ permit.permitId }}/refuse"
-               class="govuk-button govuk-button--secondary">Refuse endorsement</a>
           </div>
         </form>
       </div>
