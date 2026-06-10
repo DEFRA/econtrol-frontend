@@ -41,7 +41,7 @@
           <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
             Permit endorsed
           </h2>
-          <a href="#endorsement-section" class="govuk-notification-banner__close govuk-link govuk-link--no-visited-state" data-close-banner="">Close</a>
+          <!--<a href="#endorsement-section" class="govuk-notification-banner__close govuk-link govuk-link--no-visited-state" data-close-banner="">Close</a>-->
         </div>
         <div class="govuk-notification-banner__content">
           <p class="govuk-body">{{message}}</p>
@@ -108,7 +108,7 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Country of export</dt>
           <dd class="govuk-summary-list__value">
-            Germany
+            {{ permit.countryOfExport }}
           </dd>
         </div>
         {% endif %}
@@ -139,7 +139,7 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Country of import</dt>
           <dd class="govuk-summary-list__value">
-            United Kingdom
+            {{ permit.countryOfImport }}
           </dd>
         </div>
         {% endif %}
