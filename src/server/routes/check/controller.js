@@ -44,7 +44,7 @@ export const checkController = (searchService) => ({
       let nav = null;
       const permitSet = request.yar.get("permit_results");
 
-      if (Array.isArray(permitSet) && permitSet.length > 0) {
+      if (Array.isArray(permitSet) && permitSet.length > 1) {
         const idx = permitSet.indexOf(permitNumber);
         if (idx !== -1) {
           nav = {
