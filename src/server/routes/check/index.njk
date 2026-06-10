@@ -1,6 +1,6 @@
 {% extends "layouts/page.njk" %}
-{% if nav %}
 {% block beforeContent %}
+{% if nav %}
   <div class="govuk-width-container">
     <div class="govuk-!-margin-top-2 govuk-!-margin-bottom-2">
       <a href="/search" class="govuk-back-link">Back to search results</a>
@@ -35,8 +35,8 @@
       </div>
     </div>
   </div>
-{% endblock beforeContent %}
 {% endif %}
+{% endblock beforeContent %}
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -70,13 +70,12 @@
       </dl>
       {% if permit.exporterName or permit.exporterAddress or permit.countryOfExport %}
       <h2 class="govuk-heading-m">Exporter</h2>
-      {% endif %}
       <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         {% if permit.exporterName %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Name</dt>
           <dd class="govuk-summary-list__value">
-          {{permit.exporterName}}
+          {{ permit.exporterName }}
           </dd>
         </div>
         {% endif %}
@@ -85,7 +84,7 @@
           <dt class="govuk-summary-list__key">Address</dt>
           <dd class="govuk-summary-list__value">
             <address>
-            {{permit.exporterAddress}}
+            {{ permit.exporterAddress }}
             </address>
           </dd>
         </div>
@@ -107,7 +106,7 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Name</dt>
           <dd class="govuk-summary-list__value">
-            {{permit.importerName}}
+            {{ permit.importerName }}
           </dd>
         </div>
         {% endif %}
@@ -116,7 +115,7 @@
           <dt class="govuk-summary-list__key">Address</dt>
           <dd class="govuk-summary-list__value">
             <address>
-            {{permit.importerAddress}}
+              {{ permit.importerAddress }}
             </address>
           </dd>
         </div>
@@ -130,34 +129,43 @@
         </div>
         {% endif %}
       </dl>
+      {% endif %}
+      {% if permit.countryOfOrigin or permit.originPermitNumber %}
       <h2 class="govuk-heading-m">Origin history</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
+        {% if permit.countryOfOrigin %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Country of origin</dt>
           <dd class="govuk-summary-list__value">
             {{ permit.countryOfOrigin }}
           </dd>
         </div>
+        {% endif %}
+        {#
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date of issue</dt>
           <dd class="govuk-summary-list__value">
-            31 July 2018
+            {{ permit.dateOfIssue }}
           </dd>
         </div>
+        #}
+        {% if permit.originPermitNumber %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Permit number</dt>
           <dd class="govuk-summary-list__value">
-            18VN39735/CT-KL
+            {{ permit.originPermitNumber }}
           </dd>
         </div>
+        {% endif %}
       </dl>
+      {% endif %}
       <h2 class="govuk-heading-m">Specimen details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
         {% if permit.scientificName %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Scientific name of species</dt>
           <dd class="govuk-summary-list__value">
-            {{permit.scientificName}}
+            {{ permit.scientificName }}
           </dd>
         </div>
         {% endif %}
@@ -165,25 +173,23 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Common name of species</dt>
           <dd class="govuk-summary-list__value">
-            {{permit.commonName}}
+            {{ permit.commonName }}
           </dd>
         </div>
         {% endif %}
+        {% if permit.specimenDescription %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Description of specimens</dt>
           <dd class="govuk-summary-list__value">
-            Live Burmese python
-            <br>
-            Female
-            <br>
-            Microchip number 12345678912345
+            {{ permit.specimenDescription }}
           </dd>
         </div>
+        {% endif %}
         {% if permit.citesAppendix %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">CITES Appendix</dt>
           <dd class="govuk-summary-list__value">
-            {{permit.citesAppendix}}
+            {{ permit.citesAppendix }}
           </dd>
         </div>
         {% endif %}
@@ -195,18 +201,22 @@
           </dd>
         </div>
         {% endif %}
+        {% if permit.sourceCode %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Source</dt>
           <dd class="govuk-summary-list__value">
-            W: Wild
+            {{ permit.sourceCode }}
           </dd>
         </div>
+        {% endif %}
+        {% if permit.purposeCode %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Purpose</dt>
           <dd class="govuk-summary-list__value">
-            T: Commercial trade
+            {{ permit.purposeCode }}
           </dd>
         </div>
+        {% endif %}
         {% if permit.amount.quantity %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Quantity</dt>
@@ -223,14 +233,16 @@
           </dd>
         </div>
         {% endif %}
+        {% if permit.specialConditions %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Special conditions</dt>
           <dd class="govuk-summary-list__value">
             <p class="govuk-body-s govuk-!-margin-bottom-0">
-              This permit is valid only for the specimens and quantities stated. Transport of live animals must follow the current edition of the IATA Live Animals Regulations. A copy of this permit must travel with the consignment. Endorsement by Border Force confirms import clearance against the customs declaration you enter in this service.
+              {{ permit.specialConditions }}
             </p>
           </dd>
         </div>
+        {% endif %}
       </dl>
       <h2 class="govuk-heading-m">Authorisation and issuing details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
@@ -255,7 +267,7 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Place and date of issue</dt>
           <dd class="govuk-summary-list__value">
-            Bristol, 30 April 2026
+            Bristol, {{ permit.dateOfIssue }}
           </dd>
         </div>
       </dl>

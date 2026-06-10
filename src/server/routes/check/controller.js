@@ -41,7 +41,7 @@ export const checkController = (searchService) => ({
     if (response.ok) {
       const permit = response.value;
 
-      let nav = null;
+      let nav;
       const permitSet = request.yar.get("permit_results");
 
       if (Array.isArray(permitSet) && permitSet.length > 1) {
@@ -79,12 +79,18 @@ export const checkController = (searchService) => ({
           countryOfOrigin: permit.countryOfOrigin,
           countryOfExport: permit.countryOfExport,
           countryOfImport: permit.countryOfImport,
+          countryOfReExport: permit.countryOfReExport,
+          countryOfLastReExport: permit.countryOfLastReExport,
           gbAnnex: permit.gbAnnex,
+          purposeCode: permit.purposeCode,
+          sourceCode: permit.sourceCode,
           amount: {
             ...permit.amount,
             unitText: ('unit' in permit.amount) ? unitToText(permit.amount.unit) : undefined,
             unitTextLong: ('unit' in permit.amount) ? unitToTextLong[unitToText(permit.amount.unit)] : undefined,
           },
+          specialConditions: permit.specialConditions,
+          specimenDescription: permit.specimenDescription,
           mrn
         }
       });

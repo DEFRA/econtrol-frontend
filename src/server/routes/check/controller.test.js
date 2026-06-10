@@ -24,18 +24,24 @@ describe('#checkController', () => {
           validityDate: new Date("2026-05-31"),
           status: "Valid",
           scientificName: "Scientific name",
-          citesAppendix: "II",
           commonName: null,
+          specimenDescription: null,
+          citesAppendix: "II",
           exporterName: null,
           exporterAddress: null,
           importerName: null,
           importerAddress: null,
-          country: null,
+          originPermitNumber: "TEST_ORIGIN_PERMIT_NUMBER",
           countryOfOrigin: "TEST_COUNTRY_OF_ORIGIN",
           countryOfExport: "TEST_COUNTRY_OF_EXPORT",
           countryOfImport: "TEST_COUNTRY_OF_IMPORT",
+          countryOfReExport: "TEST_COUNTRY_OF_REEXPORT",
+          countryOfLastReExport: "TEST_COUNTRY_OF_LAST_REEXPORT",
           gbAnnex: null,
-          amount: { quantity: 1 }
+          sourceCode: null,
+          purposeCode: null,
+          amount: { quantity: 1 },
+          specialConditions: null
         }
       }),
       lookupMany: async () => ({}),
@@ -78,33 +84,39 @@ describe('#checkController', () => {
 
     expect(mockView).calledOnceWith(
       'check/index', {
-      "heading": "Check",
-      "pageTitle": "Check permit details",
-      "nav": null,
-      "permit": {
-        "permitId": "7db9f1c1-203e-4ddc-80e7-9126116ef698",
-        "permitNumber": "25GBIMPUA93QA",
-        "statusLabel": "Valid",
-        "statusLabelColour": "blue",
-        "isExportNotImport": false,
-        "validityDate": "31 May 2026",
-        "scientificName": "Scientific name",
-        "citesAppendix": "II",
-        "commonName": null,
-        "exporterName": null,
-        "exporterAddress": undefined,
-        "importerName": null,
-        "importerAddress": undefined,
-        "countryOfOrigin": "TEST_COUNTRY_OF_ORIGIN",
-        "countryOfExport": "TEST_COUNTRY_OF_EXPORT",
-        "countryOfImport": "TEST_COUNTRY_OF_IMPORT",
-        "gbAnnex": null,
-        "amount": {
+      heading: "Check",
+      pageTitle: "Check permit details",
+      nav: undefined,
+      permit: {
+        permitId: "7db9f1c1-203e-4ddc-80e7-9126116ef698",
+        permitNumber: "25GBIMPUA93QA",
+        statusLabel: "Valid",
+        statusLabelColour: "blue",
+        isExportNotImport: false,
+        validityDate: "31 May 2026",
+        scientificName: "Scientific name",
+        citesAppendix: "II",
+        commonName: null,
+        specimenDescription: null,
+        exporterName: null,
+        exporterAddress: undefined,
+        importerName: null,
+        importerAddress: undefined,
+        countryOfOrigin: "TEST_COUNTRY_OF_ORIGIN",
+        countryOfExport: "TEST_COUNTRY_OF_EXPORT",
+        countryOfImport: "TEST_COUNTRY_OF_IMPORT",
+        countryOfReExport: "TEST_COUNTRY_OF_REEXPORT",
+        countryOfLastReExport: "TEST_COUNTRY_OF_LAST_REEXPORT",
+        gbAnnex: null,
+        sourceCode: null,
+        purposeCode: null,
+        specialConditions: null,
+        amount: {
           "quantity": 1,
           "unitText": undefined,
           "unitTextLong": undefined
         },
-        "mrn": ""
+        mrn: ""
       }
     })
   })

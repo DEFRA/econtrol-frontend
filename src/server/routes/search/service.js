@@ -109,18 +109,24 @@ import { createLogger } from "../../common/helpers/logging/logger.js";
  * @property {typeof PermitStatus[keyof typeof PermitStatus]} status
  * @property {Date} validityDate
  * @property {string | null} scientificName
- * @property {string | null} commonName null
- * @property {string | null} exporterName null,
- * @property {string | null} exporterAddress "1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom"
- * @property {string | null} importerName "Rob Wilkinson DEV"
- * @property {string | null} importerAddress 1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom
+ * @property {string | null} commonName
+ * @property {string | null} specimenDescription
+ * @property {string | null} exporterName
+ * @property {string | null} exporterAddress
+ * @property {string | null} importerName
+ * @property {string | null} importerAddress
  * @property {string | null} countryOfOrigin
  * @property {string | null} countryOfExport
  * @property {string | null} countryOfImport
- * @property {string | null} country
- * @property {string} citesAppendix "II"
- * @property {string | null} gbAnnex "B"
+ * @property {string | null} countryOfReExport
+ * @property {string | null} countryOfLastReExport
+ * @property {string | null} originPermitNumber
+ * @property {string} citesAppendix
+ * @property {string | null} gbAnnex
+ * @property {string | null} purposeCode
+ * @property {string | null} sourceCode
  * @property {Quantity | NetMass} amount
+ * @property {string | null} specialConditions
  */
 
 /**
@@ -253,14 +259,29 @@ const mapPermitDetails = (permitDetails) => {
     amount = { mass: permitDetails.netMass, unit: Unit.kg }
   }
   return {
-    ...permitDetails,
-    validityDate,
-    commonName: permitDetails.commonNameOfSpecies,
+    permitId: permitDetails.permitId,
+    permitNumber: permitDetails.permitNumber,
     status: mapStatus(permitDetails.statusLabel, validityDate),
+    validityDate,
     amount,
     countryOfOrigin: permitDetails.country,
     countryOfExport: permitDetails.countryOfExport,
-    countryOfImport: permitDetails.countryOfImport
+    countryOfImport: permitDetails.countryOfImport,
+    countryOfLastReExport: permitDetails.countryOfLastReExport,
+    countryOfReExport: permitDetails.countryOfReExport,
+    originPermitNumber: permitDetails.originPermitNumber,
+    exporterAddress: permitDetails.exporterAddress,
+    exporterName: permitDetails.exporterName,
+    importerAddress: permitDetails.importerAddress,
+    importerName: permitDetails.importerName,
+    citesAppendix: permitDetails.citesAppendix,
+    gbAnnex: permitDetails.gbAnnex,
+    purposeCode: permitDetails.purposeCode,
+    sourceCode: permitDetails.sourceCode,
+    scientificName: permitDetails.scientificName,
+    commonName: permitDetails.commonNameOfSpecies,
+    specimenDescription: permitDetails.describeSpecimen,
+    specialConditions: permitDetails.specialConditions
   }
 }
 
