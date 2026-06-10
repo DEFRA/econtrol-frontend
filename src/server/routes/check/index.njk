@@ -3,8 +3,6 @@
 <div class="govuk-width-container">
   <div class="govuk-!-margin-top-2 govuk-!-margin-bottom-2">
 {% if nav %}
-  <div class="govuk-width-container">
-    <div class="govuk-!-margin-top-2 govuk-!-margin-bottom-2">
       <a href="/search" class="govuk-back-link">Back to search results</a>
       <div class="permit-pagination-inline">
         <nav class="govuk-pagination govuk-pagination--block permit-pagination-inline__nav" aria-label="navigation">
@@ -49,7 +47,7 @@
           <p class="govuk-body">{{message}}</p>
         </div>
       </div>
-  {% endfor %}
+      {% endfor %}
 {% endif %}
     </div>
   </div>
@@ -292,19 +290,31 @@
         <form method="post" action="/permit/{{ permit.permitNumber }}/endorse" autocomplete="off">
           <input type="hidden" name="permitId" value="{{ permit.permitId }}">
           <h2 class="govuk-heading-m govuk-!-margin-top-8">Enter endorsement details</h2>
-          {# <p class="govuk-body govuk-!-margin-bottom-4">Permit quantity: 1</p>--> #}
           <div class="govuk-form-group">
-            <label class="govuk-label" for="actualQuantity">{{"Ex" if permit.isExportNotImport else "Im"}}ported net mass, in {{permit.amount.unitTextLong}}</label>
-            <div class="govuk-input__wrapper">
-              <input class="govuk-input govuk-input--width-5"
-                    id="actualQuantity"
-                    name="actualQuantity"
-                    type="number"
-                    inputmode="numeric"
-                    value="">
+            {% if permit.amount.quantity %}
+            <p class="govuk-body govuk-!-margin-bottom-4">Permit quantity: {{permit.amount.quantity}}</p>
+            <label class="govuk-label" for="actualQuantity">Actual {{"ex" if permit.isExportNotImport else "im"}}ported quantity</label>
+            <input class="govuk-input govuk-input--width-5"
+                  id="actualQuantity"
+                  name="actualQuantity"
+                  type="number"
+                  inputmode="numeric"
+                  value="">
+            {% else %}
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="actualQuantity">{{"Ex" if permit.isExportNotImport else "Im"}}ported net mass, in {{permit.amount.unitTextLong}}</label>
+              <div class="govuk-input__wrapper">
+                <input class="govuk-input govuk-input--width-5"
+                      id="actualQuantity"
+                      name="actualQuantity"
+                      type="number"
+                      inputmode="numeric"
+                      value="">
 
-              <div class="govuk-input__suffix" aria-hidden="true">{{ permit.amount.unitText }}</div>
+                <div class="govuk-input__suffix" aria-hidden="true">{{ permit.amount.unitText }}</div>
+              </div>
             </div>
+            {% endif %}
           </div>
           <div class="govuk-form-group">
             <label class="govuk-label" for="deadOnArrival">Number of animals dead on arrival</label>
