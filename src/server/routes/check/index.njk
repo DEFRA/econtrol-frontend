@@ -1,5 +1,7 @@
 {% extends "layouts/page.njk" %}
 {% block beforeContent %}
+<div class="govuk-width-container">
+  <div class="govuk-!-margin-top-2 govuk-!-margin-bottom-2">
 {% if nav %}
   <div class="govuk-width-container">
     <div class="govuk-!-margin-top-2 govuk-!-margin-bottom-2">
@@ -33,9 +35,24 @@
         </nav>
         <span class="permit-pagination-inline__position govuk-body-s govuk-!-font-weight-bold">Permit {{nav.curr}} of {{nav.last}}</span>
       </div>
+{% endif %}
+{% if messages.endorse_success | length > 0 %}
+      {% for message in messages.endorse_success %}
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner" data-dismissable="" data-govuk-notification-banner-init="">
+        <div class="govuk-notification-banner__header govuk-notification-banner__header--with-close">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Permit endorsed
+          </h2>
+          <a href="#endorsement-section" class="govuk-notification-banner__close govuk-link govuk-link--no-visited-state" data-close-banner="">Close</a>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-body">{{message}}</p>
+        </div>
+      </div>
+  {% endfor %}
+{% endif %}
     </div>
   </div>
-{% endif %}
 {% endblock beforeContent %}
 {% block content %}
   <div class="govuk-grid-row">
@@ -282,7 +299,7 @@
               <input class="govuk-input govuk-input--width-5"
                     id="actualQuantity"
                     name="actualQuantity"
-                    type="text"
+                    type="number"
                     inputmode="numeric"
                     value="">
 
@@ -294,7 +311,7 @@
             <input class="govuk-input govuk-input--width-5"
                    id="deadOnArrival"
                    name="deadOnArrival"
-                   type="text"
+                   type="number"
                    inputmode="numeric"
                    maxlength="4"
                    value="">

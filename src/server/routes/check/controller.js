@@ -38,6 +38,8 @@ export const checkController = (searchService) => ({
 
     const response = await searchService.lookupOne(token, permitNumber);
 
+    const messages = request.yar.flash();
+
     if (response.ok) {
       const permit = response.value;
 
@@ -62,6 +64,7 @@ export const checkController = (searchService) => ({
         pageTitle: 'Check permit details',
         heading: 'Check',
         nav,
+        messages,
         permit: {
           permitId: permit.permitId,
           permitNumber: permit.permitNumber,
@@ -98,13 +101,6 @@ export const checkController = (searchService) => ({
       if (response.error === "Draft") {
         throw Boom.boomify(new Error("Draft"), { statusCode: 404 });
       }
-      console.log(request)
-      switch (response.error.status) {
-        case 401: {
-          console.log("401 received from Pegasus")
-          //return h.redirect("/auth/login")
-        }
-      }
     }
   }
 })
@@ -118,7 +114,6 @@ export const setMrnController = () => ({
     /** @type {Object} */
     const { mrn } = (/** @type (any)*/ (request.payload));
 
-    console.log(`MRN: ${mrn}`)
     request.yar.set("mrn", mrn);
 
     return h.response('OK').code(200);
@@ -147,19 +142,23 @@ export const endorseController = (searchService) => ({
       throw Boom.badRequest("Invalid permit number");
     }
 
+    /** @type {import('../search/service').EndorsePermit} */
     const endorsement = {
-      ...payload,
-      cites_unitreturned: QUANTITY
-      //tradeDate: new Date()
+      permitId: payload.permitId,
+      actualQuantity: Number(payload.actualQuantity),
+      numberOfAnimalsDOA: Number(payload.numberOfAnimalsDOA),
+      mrnReference: payload.mrnReference,
+      customersOfficerId: "NOT_IMPLEMENTED",
+      port: "NOT_IMPLEMENTED"
     }
 
     const response = await searchService.endorseOne(token, endorsement);
-    console.log(`PEGASUS ENDORSE RES: ${JSON.stringify(response)}`)
 
     if (response.ok) {
+      request.yar.flash("endorse_success", "The permit has been successfully endorsed.");
       return h.redirect(`/check-permit-details?permitNumber=${permitNumber}`);
     } else {
-      var error = new Error('Unexpected error');
+      const error = new Error('Unexpected error');
       throw Boom.boomify(error, { statusCode: response.error.status });
     }
   }

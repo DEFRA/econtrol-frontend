@@ -131,6 +131,7 @@ describe('#resultsController', () => {
     const stateGet = vi.fn()
     const stateSet = vi.fn()
     const mockView = vi.fn()
+    const mockFlash = vi.fn()
 
     const { handler } = resultsController(mockService)
 
@@ -145,7 +146,8 @@ describe('#resultsController', () => {
       // @ts-ignore
       yar: {
         get: stateGet,
-        set: stateSet
+        set: stateSet,
+        flash: mockFlash,
       },
       // @ts-ignore
       auth: {

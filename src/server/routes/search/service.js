@@ -1,6 +1,3 @@
-// @ts-check
-import Ajv from "ajv";
-
 import { createLogger } from "../../common/helpers/logging/logger.js";
 
 /**
@@ -63,32 +60,32 @@ import { createLogger } from "../../common/helpers/logging/logger.js";
 /**
  * Permit details as represented by Pegasus
  * @typedef {Object} PermitDetailsDTO
- * @property {string} permitId "b352df39-3639-ef11-a316-000d3ad59b50"
- * @property {string} permitNumber "24GBEXPE5Y9KC"
- * @property {number} statuscode 149900002
- * @property {string} statusLabel "Returned - Used"
- * @property {string} validityDate "2025-01-03"
- * @property {number} netMass 0,
- * @property {number} quantity  20
- * @property {string} citesAppendix "II"
+ * @property {string} permitId
+ * @property {string} permitNumber
+ * @property {number} statuscode
+ * @property {string} statusLabel
+ * @property {string} validityDate
+ * @property {number | null} netMass
+ * @property {number | null} quantity
+ * @property {string} citesAppendix
  * @property {string} originPermitNumber
  * @property {string} permitType
- * @property {string | null} commonNameOfSpecies null
+ * @property {string | null} commonNameOfSpecies
  * @property {string} country
- * @property {string | null} countryOfExport null
- * @property {string | null} countryOfImport null
- * @property {string | null} countryOfLastReExport hull
- * @property {string | null} countryOfReExport null
+ * @property {string | null} countryOfExport
+ * @property {string | null} countryOfImport
+ * @property {string | null} countryOfLastReExport
+ * @property {string | null} countryOfReExport
  * @property {string | null} describeSpecimen
- * @property {string | null} exporterAddress "1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom"
- * @property {string | null} exporterName null,
- * @property {string | null} gbAnnex "B"
- * @property {string | null} importerAddress 1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom
- * @property {string | null} importerName "Rob Wilkinson DEV"
- * @property {string | null} purposeCode "E - Educational"
+ * @property {string | null} exporterAddress
+ * @property {string | null} exporterName
+ * @property {string | null} gbAnnex
+ * @property {string | null} importerAddress
+ * @property {string | null} importerName
+ * @property {string | null} purposeCode
  * @property {string | null} scientificName
- * @property {string | null} sourceCode null
- * @property {string | null} specialConditions null
+ * @property {string | null} sourceCode
+ * @property {string | null} specialConditions
  */
 
 /** @typedef {Object} Quantity
@@ -100,33 +97,32 @@ import { createLogger } from "../../common/helpers/logging/logger.js";
  *  @property {typeof Unit[keyof typeof Unit]} unit
  */
 
-
 /**
  * Permit details as represented within this service
- * @typedef {Object} PermitDetails
- * @property {string} permitId
- * @property {string} permitNumber
+ * @typedef {Object}              PermitDetails
+ * @property {string}             permitId
+ * @property {string}             permitNumber
  * @property {typeof PermitStatus[keyof typeof PermitStatus]} status
- * @property {Date} validityDate
- * @property {string | null} scientificName
- * @property {string | null} commonName
- * @property {string | null} specimenDescription
- * @property {string | null} exporterName
- * @property {string | null} exporterAddress
- * @property {string | null} importerName
- * @property {string | null} importerAddress
- * @property {string | null} countryOfOrigin
- * @property {string | null} countryOfExport
- * @property {string | null} countryOfImport
- * @property {string | null} countryOfReExport
- * @property {string | null} countryOfLastReExport
- * @property {string | null} originPermitNumber
- * @property {string} citesAppendix
- * @property {string | null} gbAnnex
- * @property {string | null} purposeCode
- * @property {string | null} sourceCode
+ * @property {Date}               validityDate
+ * @property {string | null}      scientificName
+ * @property {string | null}      commonName
+ * @property {string | null}      specimenDescription
+ * @property {string | null}      exporterName
+ * @property {string | null}      exporterAddress
+ * @property {string | null}      importerName
+ * @property {string | null}      importerAddress
+ * @property {string | null}      countryOfOrigin
+ * @property {string | null}      countryOfExport
+ * @property {string | null}      countryOfImport
+ * @property {string | null}      countryOfReExport
+ * @property {string | null}      countryOfLastReExport
+ * @property {string | null}      originPermitNumber
+ * @property {string}             citesAppendix
+ * @property {string | null}      gbAnnex
+ * @property {string | null}      purposeCode
+ * @property {string | null}      sourceCode
  * @property {Quantity | NetMass} amount
- * @property {string | null} specialConditions
+ * @property {string | null}      specialConditions
  */
 
 /**
@@ -139,20 +135,6 @@ import { createLogger } from "../../common/helpers/logging/logger.js";
  * @property {string} customersOfficerId
  * @property {string} port
  */
-
-/**@type import("ajv").Schema */
-const schema = {
-  type: "object",
-  properties: {
-    permtiId: { type: "string" },
-    cites_NumberofanimalsDOA: { type: "number" },
-    cites_MovementReferenceNumberMRN: { type: "string" },
-    cites_tradedate: { type: "string" },
-    cites_Port: { type: "string" },
-  },
-  required: ["permitId"],
-  additionalProperties: false
-}
 
 export const Unit = Object.freeze({
   g: 149900000,
@@ -172,13 +154,13 @@ export const QUANTITY = 149900009
  * Permit details as represented by Pegasus Endorse API
  * Most of the fields are optional but we will permitDetails
  * all for completeness.
- * @typedef {Object} EndorsePermitDTO
- * @property {string}                                     permitId
- * @property {number=}                                    cites_NumberofanimalsDOA
- * @property {string=}                                    cites_MovementReferenceNumberMRN
- * @property {string=}                                    cites_tradedate
- * @property {string=}                                    cites_CustomsOfficerEpauletteNumber
- * @property {string=}                                    cites_Port
+ * @typedef  {Object}  EndorsePermitDTO
+ * @property {string}  permitId
+ * @property {number=} cites_NumberofanimalsDOA
+ * @property {string=} cites_MovementReferenceNumberMRN
+ * @property {string=} cites_tradedate
+ * @property {string=} cites_CustomsOfficerEpauletteNumber
+ * @property {string=} cites_Port
  */
 
 /**
@@ -256,7 +238,7 @@ const mapPermitDetails = (permitDetails) => {
   if (permitDetails.quantity) {
     amount = { quantity: permitDetails.quantity }
   } else {
-    amount = { mass: permitDetails.netMass, unit: Unit.kg }
+    amount = { mass: permitDetails.netMass || 0, unit: Unit.kg }
   }
   return {
     permitId: permitDetails.permitId,
@@ -360,7 +342,7 @@ export const searchService = (baseURL, fetch) => ({
       ok: false,
       error: {
         status: response.status,
-        message: response.statusText
+        message: response.body
       }
     };
   }

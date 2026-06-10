@@ -74,7 +74,8 @@ describe('#checkController', () => {
       // @ts-ignore
       yar: {
         get: stateGet,
-        set: stateSet
+        set: stateSet,
+        flash: vi.fn()
       },
       // @ts-ignore
       auth: { credentials: { token: "TEST_TOKEN" } }
