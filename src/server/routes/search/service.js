@@ -1,6 +1,8 @@
 // @ts-check
 import Ajv from "ajv";
 
+import { createLogger } from "../../common/helpers/logging/logger.js";
+
 /**
  * Search service factory
  * @callback SearchServiceFactory
@@ -230,13 +232,15 @@ const mapStatus = (statusLabel, validityDate) => {
   return status;
 }
 
+const logger = createLogger();
+
 /**
  * @param {PermitDetailsDTO} permitDetails
  * @returns {PermitDetails}
  */
 const mapPermitDetails = (permitDetails) => {
   if (permitDetails.country == null) {
-    throw new Error("Pegasus returned no country of origin but it is mandatory")
+    logger.warn("Pegasus returned no country of origin but it is mandatory")
   }
   const validityDate = new Date(permitDetails.validityDate)
   let amount;
