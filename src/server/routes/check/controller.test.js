@@ -30,6 +30,10 @@ describe('#checkController', () => {
           exporterAddress: null,
           importerName: null,
           importerAddress: null,
+          country: null,
+          countryOfOrigin: "TEST_COUNTRY_OF_ORIGIN",
+          countryOfExport: "TEST_COUNTRY_OF_EXPORT",
+          countryOfImport: "TEST_COUNTRY_OF_IMPORT",
           gbAnnex: null,
           amount: { quantity: 1 }
         }
@@ -91,6 +95,9 @@ describe('#checkController', () => {
         "exporterAddress": undefined,
         "importerName": null,
         "importerAddress": undefined,
+        "countryOfOrigin": "TEST_COUNTRY_OF_ORIGIN",
+        "countryOfExport": "TEST_COUNTRY_OF_EXPORT",
+        "countryOfImport": "TEST_COUNTRY_OF_IMPORT",
         "gbAnnex": null,
         "amount": {
           "quantity": 1,

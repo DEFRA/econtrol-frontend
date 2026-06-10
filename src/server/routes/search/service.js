@@ -114,7 +114,10 @@ import { createLogger } from "../../common/helpers/logging/logger.js";
  * @property {string | null} exporterAddress "1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom"
  * @property {string | null} importerName "Rob Wilkinson DEV"
  * @property {string | null} importerAddress 1, BURNS CLOSE, KIDDERMINSTER, WYRE FOREST, DY10 3ET, United Kingdom
- * @property {string} countryOfOrigin
+ * @property {string | null} countryOfOrigin
+ * @property {string | null} countryOfExport
+ * @property {string | null} countryOfImport
+ * @property {string | null} country
  * @property {string} citesAppendix "II"
  * @property {string | null} gbAnnex "B"
  * @property {Quantity | NetMass} amount
@@ -255,7 +258,9 @@ const mapPermitDetails = (permitDetails) => {
     commonName: permitDetails.commonNameOfSpecies,
     status: mapStatus(permitDetails.statusLabel, validityDate),
     amount,
-    countryOfOrigin: permitDetails.country
+    countryOfOrigin: permitDetails.country,
+    countryOfExport: permitDetails.countryOfExport,
+    countryOfImport: permitDetails.countryOfImport
   }
 }
 

@@ -90,12 +90,14 @@
           </dd>
         </div>
         {% endif %}
+        {% if permit.countryOfExport %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Country of export</dt>
           <dd class="govuk-summary-list__value">
             Germany
           </dd>
         </div>
+        {% endif %}
       </dl>
       {% if permit.importerName or permit.importerAddress %}
       <h2 class="govuk-heading-m">Importer</h2>
@@ -119,12 +121,14 @@
           </dd>
         </div>
         {% endif %}
+        {% if permit.countryOfImport %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Country of import</dt>
           <dd class="govuk-summary-list__value">
             United Kingdom
           </dd>
         </div>
+        {% endif %}
       </dl>
       <h2 class="govuk-heading-m">Origin history</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-6 permit-summary-16px permit-details-summary-list">
