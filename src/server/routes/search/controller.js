@@ -102,7 +102,7 @@ export const resultsController = (searchService) => ({
 
     const errors = [...Object.entries(permits).filter(([_, v]) => !v.ok).map(([k, _]) => k), ...invalid];
 
-    request.yar.set('permit_results', results.map(r => r.permitNumber));
+    request.yar.set('permit_results', results);
 
     return h.view('search/results', {
       pageTitle: 'Permit search results',

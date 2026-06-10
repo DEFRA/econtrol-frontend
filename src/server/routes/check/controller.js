@@ -45,13 +45,13 @@ export const checkController = (searchService) => ({
       const permitSet = request.yar.get("permit_results");
 
       if (Array.isArray(permitSet) && permitSet.length > 1) {
-        const idx = permitSet.indexOf(permitNumber);
+        const idx = permitSet.findIndex(i => i.permitNumber === permitNumber);
         if (idx !== -1) {
           nav = {
             curr: idx + 1,
             last: permitSet.length,
-            prev: idx > 0 ? permitSet[idx - 1] : null,
-            next: idx < permitSet.length - 1 ? permitSet[idx + 1] : null
+            prev: idx > 0 ? permitSet[idx - 1].permitNumber : null,
+            next: idx < permitSet.length - 1 ? permitSet[idx + 1].permitNumber : null
           }
         }
       }
