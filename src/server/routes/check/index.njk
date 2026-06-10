@@ -1,9 +1,9 @@
 {% extends "layouts/page.njk" %}
+{% if nav %}
 {% block beforeContent %}
   <div class="govuk-width-container">
     <div class="govuk-!-margin-top-2 govuk-!-margin-bottom-2">
       <a href="/search" class="govuk-back-link">Back to search results</a>
-      {% if nav %}
       <div class="permit-pagination-inline">
         <nav class="govuk-pagination govuk-pagination--block permit-pagination-inline__nav" aria-label="navigation">
           {% if nav.prev %}
@@ -33,10 +33,10 @@
         </nav>
         <span class="permit-pagination-inline__position govuk-body-s govuk-!-font-weight-bold">Permit {{nav.curr}} of {{nav.last}}</span>
       </div>
-      {% endif %}
     </div>
   </div>
 {% endblock beforeContent %}
+{% endif %}
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
